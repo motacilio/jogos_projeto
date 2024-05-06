@@ -106,16 +106,13 @@ public class Cliente extends Pessoa {
     }
 
     public void comprar(Estoque estoque, int codigo) {
-        estoque.
-
+        estoque.vender(codigo);
     }
 
-    private  int mostrarQntdAtrasos() {
-
-    }
-
-    public String mostrarAlugueis() {
-
+    public void mostrarAlugueis() {
+        for(Aluguel aluguel: alugueis){
+            System.out.println(aluguel.codigoJogo);
+        }
     }
 
 

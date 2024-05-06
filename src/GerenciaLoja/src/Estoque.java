@@ -33,6 +33,22 @@ public class Estoque {
         qtdeTab--;
     }
 
+    public int vender(int codigo){
+        Jogo jogoAux = null;
+
+        for(Jogo jogo : jogos){
+            if(jogo.codigo == codigo){
+                jogoAux = jogo;
+            }
+        }
+        if(jogoAux.getQuantidade() > 0){
+            jogoAux.setQuantidade(-1);
+            return 0;
+        }else {
+            return 1;
+        }
+    }
+
     public void removerJogoDig(int codigo){
         Jogo jogoAux = null;
 

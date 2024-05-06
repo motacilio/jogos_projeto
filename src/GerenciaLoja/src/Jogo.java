@@ -37,4 +37,8 @@ public class Jogo {
     public double getValor() {
         return valor;
     }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade -= quantidade;
+    }
 }
