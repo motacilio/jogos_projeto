@@ -55,7 +55,7 @@ public class Cliente extends Pessoa {
 
     public boolean alugar(Estoque estoque, int codigo) {
         Jogo jogoAux = null;
-        Aluguel aluguelAux = new Aluguel(codigo, LocalDate.now());
+        Aluguel aluguelAux = new Aluguel(codigo);
 
         if(this.qtdeAtrasos() > 0){
             return false;
@@ -80,15 +80,33 @@ public class Cliente extends Pessoa {
         return true;
     }
 
-    private void devolver() {
+    private double devolver(Estoque estoque, int codigo) {
+        double multa = 0;
+        if(qtdeAtrasos() > 0){
+            for(Aluguel aluguel : alugueis){
+                if(aluguel.atraso()){
+                    multa = aluguel.verificarMulta();
+                }
+            }
+            return multa;
+        }else{
+            return 0;
+        }
 
     }
 
-    public void renovarAluguel() {
+    public int renovarAluguel(int codigo, Estoque estoque) {
+        if(this.qtdeAtrasos() > 0){
+            return 1;
+        }else{
+            this.alugar(estoque, codigo);
+        }
 
+        return 0;
     }
 
-    public void comprar() {
+    public void comprar(Estoque estoque, int codigo) {
+        estoque.
 
     }
 

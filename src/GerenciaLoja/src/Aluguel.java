@@ -1,34 +1,43 @@
 import java.time.LocalDate;
 
 public class Aluguel {
-    protected final int tempoDevolucaoDias = 3;
     protected static int countCodigo = 0;
     protected int codigo;
-    protected LocalDate dataAluguel;
+
     protected int codigoJogo;
 
-    Aluguel (int codigoJogo, LocalDate dataAluguel) {
+    protected final int tempoDevolucaoDias = 3;
+    protected LocalDate dataAluguel;
+    protected int diasDeAtraso = 0;
+
+    Aluguel (int codigoJogo) {
         this.codigo = ++countCodigo;
         this.codigoJogo = codigoJogo;
-        this.dataAluguel = dataAluguel;
+        this.dataAluguel = LocalDate.now();
     }
 
-
-    // Métodos Gets
-
-    // Métodos Sets
-
-    // Métodos Extras
-    public boolean atraso(){
-        return dataAluguel.plusDays(tempoDevolucaoDias).isAfter(LocalDate.now());
-    }
-
-    public double verificarMulta() {
-
-    }
-
+    // Método para calcular a data de devolução
     public LocalDate dataDevolucao() {
-
+        return dataAluguel.plusDays(tempoDevolucaoDias);
     }
 
+    // Método para verificar se houve atraso na devolução
+    public boolean atraso(){
+        LocalDate dataDevolucao = dataDevolucao();
+        return LocalDate.now().isAfter(dataDevolucao);
+    }
+
+    // Método para calcular a multa
+    public double verificarMulta() {
+        if (atraso()) {
+            diasDeAtraso = (int) dataDevolucao().until(LocalDate.now()).getDays();
+            if(diasDeAtraso < -1){
+                return 0;
+            }else{
+                return 3.50 * diasDeAtraso;
+            }
+        } else {
+            return 0;
+        }
+    }
 }

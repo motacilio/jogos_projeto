@@ -18,8 +18,6 @@ public class Jogo {
         this.empresa = empresa;
     }
 
-
-
     public int getQuantidade() {
         return quantidade;
     }
