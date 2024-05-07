@@ -12,12 +12,12 @@ public class Estoque {
 
     public void adicionarJogoTab(Jogo jogo){
         jogos.add(jogo);
-        qtdeTab++;
+        qtdeTab += jogo.getQuantidade();
     }
 
     public void adicionarJogoDig(Jogo jogo){
         jogos.add(jogo);
-        qtdeDig++;
+        qtdeDig += jogo.getQuantidade();
     }
 
     public void removerJogoTab(int codigo){
