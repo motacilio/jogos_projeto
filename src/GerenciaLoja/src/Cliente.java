@@ -71,7 +71,7 @@ public class Cliente extends Pessoa {
         int quantidade = jogoAux.getQuantidade();
 
         if(quantidade < 10){
-            System.out.println("Impossível alugar!");
+            return false;
         }else{
             alugueis.add(aluguelAux);
             jogoAux.quantidade--;
@@ -80,7 +80,7 @@ public class Cliente extends Pessoa {
         return true;
     }
 
-    private double devolver(Estoque estoque, int codigo) {
+    public double devolver(Estoque estoque, int codigo) {
         double multa = 0;
         if(qtdeAtrasos() > 0){
             for(Aluguel aluguel : alugueis){
