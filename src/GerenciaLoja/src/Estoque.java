@@ -33,7 +33,7 @@ public class Estoque {
         qtdeTab--;
     }
 
-    public int vender(int codigo){
+    public int vender(int codigo, int quant){
         Jogo jogoAux = null;
 
         for(Jogo jogo : jogos){
@@ -42,7 +42,7 @@ public class Estoque {
             }
         }
         if(jogoAux.getQuantidade() > 0){
-            jogoAux.setQuantidade(-1);
+            jogoAux.setQuantidade(quant);
             return 0;
         }else {
             return 1;
@@ -62,7 +62,13 @@ public class Estoque {
         qtdeTab--;
     }
 
-//    public String mostrarJogos(){
-//
-//    }
+    public String mostrarJogos(){
+        StringBuilder s = new StringBuilder();
+
+        for(Jogo jogo : jogos){
+            s.append(jogo.mostraInfo()).append("\n");
+        }
+
+        return s.toString();
+    }
 }

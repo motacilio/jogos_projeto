@@ -3,11 +3,18 @@ import java.util.Scanner;
 
 public class Gerente extends Funcionario {
 
-    protected double bonificacao;
+    protected double comissao;
 
-    Gerente(String nome, String cpf, LocalDate dataNascimento, LocalDate dataAdmissao, double salario, double bonificacao){
+    Gerente(String nome, String cpf, LocalDate dataNascimento, LocalDate dataAdmissao, double salario){
         super(nome, cpf, dataNascimento, dataAdmissao, salario);
-        this.bonificacao = bonificacao;
+    }
+
+    public void setComissao(double comissao) {
+        this.comissao = comissao;
+    }
+
+    private void modificarSalario(){
+        this.salario += comissao;
     }
 
     void modificarEstoque(Estoque estoque){

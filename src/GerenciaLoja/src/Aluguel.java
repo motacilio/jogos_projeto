@@ -6,7 +6,7 @@ public class Aluguel {
 
     protected int codigoJogo;
 
-    protected final int tempoDevolucaoDias = 3;
+    protected final int tempoDevDias = 3;
     protected LocalDate dataAluguel;
     protected int diasDeAtraso = 0;
 
@@ -18,7 +18,7 @@ public class Aluguel {
 
     // Método para calcular a data de devolução
     public LocalDate dataDevolucao() {
-        return dataAluguel.plusDays(tempoDevolucaoDias);
+        return dataAluguel.plusDays(tempoDevDias);
     }
 
     // Método para verificar se houve atraso na devolução

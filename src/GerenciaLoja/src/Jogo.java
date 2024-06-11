@@ -18,6 +18,13 @@ public class Jogo {
         this.empresa = empresa;
     }
 
+    public String mostraInfo(){
+        String s = ("Nome do jogo: " + nome + "\nValor: " + valor + "\nQuantidade do jogo: " + quantidade +
+                '\n' + "Genero: " + genero + "\nEmpresa: " + empresa);
+
+    return s;
+    }
+
     public int getQuantidade() {
         return quantidade;
     }
@@ -36,6 +43,30 @@ public class Jogo {
 
     public double getValor() {
         return valor;
+    }
+
+    public static void setCodigoAtual(int codigoAtual) {
+        Jogo.codigoAtual = codigoAtual;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 
     public void setQuantidade(int quantidade) {

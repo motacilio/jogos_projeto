@@ -14,9 +14,24 @@ public class Funcionario extends Pessoa {
         matricula = matriculaAtual++;
     }
 
-    void modificarSalario(double salario) {
-        this.salario = salario;
+    public void mostrarInfo(){
+        System.out.println("Nome: " + this.getNome() + "\nCPF: " + this.getCpf()+
+                "\nData de admissao: " + this.getDataAdmissao() + "\nSalario: " + this.getSalario());
     }
 
+    public LocalDate getDataAdmissao() {
+        return dataAdmissao;
+    }
 
+    public void setDataAdmissao(LocalDate dataAdmissao) {
+        this.dataAdmissao = dataAdmissao;
+    }
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
 }

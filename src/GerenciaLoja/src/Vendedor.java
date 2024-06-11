@@ -30,8 +30,13 @@ public class Vendedor extends Funcionario {
     }
 
     // Métodos
-    public void vender(double) {
+    public void vender(double valorVenda) {
         this.vendasMes++;
+        comissao += 0.05 * valorVenda;
+        this.modificarSalario();
     }
 
+    private void modificarSalario(){
+        this.salario += comissao;
+    }
 }

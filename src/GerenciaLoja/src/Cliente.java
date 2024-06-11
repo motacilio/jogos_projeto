@@ -105,8 +105,8 @@ public class Cliente extends Pessoa {
         return 0;
     }
 
-    public void comprar(Estoque estoque, int codigo) {
-        estoque.vender(codigo);
+    public void comprar(Estoque estoque, int codigo, int quant) {
+        estoque.vender(codigo, quant);
     }
 
     public void mostrarAlugueis() {
@@ -114,6 +114,4 @@ public class Cliente extends Pessoa {
             System.out.println(aluguel.codigoJogo);
         }
     }
-
-
 }
