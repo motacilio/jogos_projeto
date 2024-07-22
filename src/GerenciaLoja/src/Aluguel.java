@@ -4,15 +4,15 @@ public class Aluguel {
     protected static int countCodigo = 0;
     protected int codigo;
 
-    protected int codigoJogo;
+    protected Jogo jogo;
 
     protected final int tempoDevDias = 3;
     protected LocalDate dataAluguel;
     protected int diasDeAtraso = 0;
 
-    Aluguel (int codigoJogo) {
+    Aluguel (Jogo jogo, Estoque estoque) {
         this.codigo = ++countCodigo;
-        this.codigoJogo = codigoJogo;
+        this.jogo = jogo;
         this.dataAluguel = LocalDate.now();
     }
 

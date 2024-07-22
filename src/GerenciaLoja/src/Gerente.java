@@ -13,7 +13,7 @@ public class Gerente extends Funcionario {
         this.comissao = comissao;
     }
 
-    private void modificarSalario(){
+    public void modificarSalario(){
         this.salario += comissao;
     }
 

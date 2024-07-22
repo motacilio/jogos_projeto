@@ -55,7 +55,6 @@ public class Cliente extends Pessoa {
 
     public boolean alugar(Estoque estoque, int codigo) {
         Jogo jogoAux = null;
-        Aluguel aluguelAux = new Aluguel(codigo);
 
         if(this.qtdeAtrasos() > 0){
             return false;
@@ -67,6 +66,8 @@ public class Cliente extends Pessoa {
                 break;
             }
         }
+
+        Aluguel aluguelAux = new Aluguel(jogoAux, estoque);
 
         int quantidade = jogoAux.getQuantidade();
 
@@ -101,17 +102,18 @@ public class Cliente extends Pessoa {
         }else{
             this.alugar(estoque, codigo);
         }
-
         return 0;
     }
 
     public void comprar(Estoque estoque, int codigo, int quant) {
+
         estoque.vender(codigo, quant);
     }
 
     public void mostrarAlugueis() {
         for(Aluguel aluguel: alugueis){
-            System.out.println(aluguel.codigoJogo);
+            System.out.println(aluguel.jogo.getNome());
         }
     }
+
 }

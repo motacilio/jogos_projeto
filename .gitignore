@@ -1,7 +1,7 @@
 ### IntelliJ IDEA ###
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+!src/GerenciaJogos/src/main/**/out/
+!src/GerenciaJogos/src/test/**/out/
 
 ### Eclipse ###
 .apt_generated
@@ -12,8 +12,8 @@ out/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+!src/GerenciaJogos/src/main/**/bin/
+!src/GerenciaJogos/src/test/**/bin/
 
 ### NetBeans ###
 /nbproject/private/
