@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-
-public class Jogo {
+public abstract class Jogo {
     protected static int codigoAtual = 0;
     protected int codigo;
     protected int quantidade;

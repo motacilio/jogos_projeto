@@ -1,7 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Pessoa {
+public  class Pessoa {
     protected static int countCodigo = 0;
     protected int codigo;
     protected String nome;
