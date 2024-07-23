@@ -1,30 +1,23 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Funcionario extends Pessoa {
+public class Funcionario extends Pessoa implements Serializable {
 
     private static int matriculaAtual = 0;
     protected int matricula;
-    protected LocalDate dataAdmissao;
     protected double salario;
 
-    Funcionario (String nome, String cpf, LocalDate dataNascimento, LocalDate dataAdmissao, double salario) {
-        super(nome, cpf, dataNascimento);
-        this.dataAdmissao = dataAdmissao;
+    Funcionario (String nome, String cpf, double salario) {
+        super(nome, cpf);
         this.salario = salario;
         matricula = matriculaAtual++;
     }
 
+    Funcionario(){}
+
     public void mostrarInfo(){
         System.out.println("Nome: " + this.getNome() + "\nCPF: " + this.getCpf()+
-                "\nData de admissao: " + this.getDataAdmissao() + "\nSalario: " + this.getSalario());
-    }
-
-    public LocalDate getDataAdmissao() {
-        return dataAdmissao;
-    }
-
-    public void setDataAdmissao(LocalDate dataAdmissao) {
-        this.dataAdmissao = dataAdmissao;
+                "\nSalario: " + this.getSalario());
     }
 
     public double getSalario() {
@@ -33,5 +26,9 @@ public class Funcionario extends Pessoa {
 
     public void setSalario(double salario) {
         this.salario = salario;
+    }
+
+    public void setMatricula(int matricula) {
+        this.matricula = matricula;
     }
 }

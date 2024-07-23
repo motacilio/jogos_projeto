@@ -1,13 +1,16 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-public class Gerente extends Funcionario {
+public class Gerente extends Funcionario implements Serializable {
 
     protected double comissao;
 
-    Gerente(String nome, String cpf, LocalDate dataNascimento, LocalDate dataAdmissao, double salario){
-        super(nome, cpf, dataNascimento, dataAdmissao, salario);
+    Gerente(String nome, String cpf, double salario){
+        super(nome, cpf, salario);
     }
+
+    public Gerente(){}
 
     public void setComissao(double comissao) {
         this.comissao = comissao;

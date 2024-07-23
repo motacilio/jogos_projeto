@@ -1,20 +1,21 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public  class Pessoa {
+public  class Pessoa implements Serializable {
     protected static int countCodigo = 0;
     protected int codigo;
     protected String nome;
     protected String cpf;
-    protected LocalDate dataNascimento;
     ArrayList<Endereco> enderecos = new ArrayList<Endereco>();
 
-    Pessoa(String nome, String cpf, LocalDate dataNascimento) {
+    Pessoa(String nome, String cpf) {
         this.codigo = ++countCodigo;
         this.nome = nome;
-        this.dataNascimento = dataNascimento;
         this.cpf = cpf;
     }
+
+    Pessoa(){}
 
     // Métodos Gets
     public String getNome() {
@@ -25,16 +26,9 @@ public  class Pessoa {
         return cpf;
     }
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
 
 
     // Métodos Sets
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;

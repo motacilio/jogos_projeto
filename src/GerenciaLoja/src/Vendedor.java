@@ -1,12 +1,12 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Vendedor extends Funcionario {
+public class Vendedor extends Funcionario implements Serializable {
     protected double comissao;
     protected int vendasMes;
 
-    Vendedor (String nome, String cpf, LocalDate dataNascimento, LocalDate dataAdmissao, double salario, double comissao) {
-        super(nome, cpf, dataNascimento, dataAdmissao, salario);
-        this.comissao = comissao;
+    Vendedor (String nome, String cpf, double salario) {
+        super(nome, cpf, salario);
         this.vendasMes = 0;
     }
 

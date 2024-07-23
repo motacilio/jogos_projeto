@@ -8,8 +8,8 @@ public class Cliente extends Pessoa {
     protected int numAluguel;
     List<Aluguel> alugueis = new ArrayList<>();
 
-    Cliente (String nome, String cpf, LocalDate dataNascimento) {
-        super(nome, cpf, dataNascimento);
+    Cliente (String nome, String cpf) {
+        super(nome, cpf);
         this.numCompras = 0;
         this.numAluguel = 0;
     }
