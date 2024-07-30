@@ -54,17 +54,22 @@ public class Main {
     public static ArrayList<Vendedor> instanciaFuncs() throws IOException {
         ArrayList<Vendedor> v = new ArrayList<>();
         Vendedor vend;
-        FileInputStream fx = new FileInputStream("vend.txt");
-        ObjectInputStream ox = new ObjectInputStream(fx);
+        try{
+            FileInputStream fx = new FileInputStream("vend.txt");
+            ObjectInputStream ox = new ObjectInputStream(fx);
 
-        while (true) {
-            try {
-                vend = (Vendedor) ox.readObject();
-                v.add(vend);
-            } catch (EOFException | ClassNotFoundException e) {
-                return null;
+            while (true) {
+                try {
+                    vend = (Vendedor) ox.readObject();
+                    v.add(vend);
+                } catch (EOFException | ClassNotFoundException e) {
+                    return null;
+                }
             }
+        }catch(Exception e){
+            return null;
         }
+        
     }
 
     public static void main(String[] args) throws IOException {
@@ -79,10 +84,10 @@ public class Main {
 
         System.out.println("Gerente\n"+gerente.getNome() +"-"+ gerente.matricula + "\n");
 
-        System.out.println("Vendedores\n");
-        for (Vendedor vendedor : vendedores) {
-            System.out.println(vendedor.getNome() +"-"+ vendedor.matricula);
-        }
+        // System.out.println("Vendedores\n");
+        // for (Vendedor vendedor : vendedores) {
+        //     System.out.println(vendedor.getNome() +"-"+ vendedor.matricula);
+        // }
         System.out.println();
 
         String senhaComum = "senha";
