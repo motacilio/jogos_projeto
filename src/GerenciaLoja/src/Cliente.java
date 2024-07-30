@@ -14,33 +14,6 @@ public class Cliente extends Pessoa {
         this.numAluguel = 0;
     }
 
-    // Métodos Gets
-
-    public int getNumCompras() {
-        return numCompras;
-    }
-
-    public int getNumAluguel() {
-        return numAluguel;
-    }
-
-    public List<Aluguel> getAlugueis() {
-        return alugueis;
-    }
-
-    // Métodos Sets
-    public void setNumCompras(int numCompras) {
-        this.numCompras = numCompras;
-    }
-
-    public void setNumAluguel(int numAluguel) {
-        this.numAluguel = numAluguel;
-    }
-
-    public void setAlugueis(List<Aluguel> alugueis) {
-        this.alugueis = alugueis;
-    }
-
     // Métodos Extras
 
     private int qtdeAtrasos(){
@@ -106,7 +79,6 @@ public class Cliente extends Pessoa {
     }
 
     public void comprar(Estoque estoque, int codigo, int quant) {
-
         estoque.vender(codigo, quant);
     }
 
@@ -115,5 +87,33 @@ public class Cliente extends Pessoa {
             System.out.println(aluguel.jogo.getNome());
         }
     }
+
+    // Métodos Gets
+
+    public int getNumCompras() {
+        return numCompras;
+    }
+
+    public int getNumAluguel() {
+        return numAluguel;
+    }
+
+    public List<Aluguel> getAlugueis() {
+        return alugueis;
+    }
+
+    // Métodos Sets
+    public void setNumCompras(int numCompras) {
+        this.numCompras = numCompras;
+    }
+
+    public void setNumAluguel(int numAluguel) {
+        this.numAluguel = numAluguel;
+    }
+
+    public void setAlugueis(List<Aluguel> alugueis) {
+        this.alugueis = alugueis;
+    }
+
 
 }

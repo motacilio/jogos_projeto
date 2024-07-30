@@ -65,6 +65,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        Estoque estoque = Estoque.getInstance();
+
         gravaGerente(new Gerente("Cleber", "9845", 6000));
         Gerente gerente = instanciaGerente();
         gerente.setMatricula(1);
@@ -82,7 +84,6 @@ public class Main {
             System.out.println(vendedor.getNome() +"-"+ vendedor.matricula);
         }
 
-        int funcionario = 0;
         String commonPassword = "senha";
         int GerenteMatricula = 1000;
         String GerenteSenha = "admin";

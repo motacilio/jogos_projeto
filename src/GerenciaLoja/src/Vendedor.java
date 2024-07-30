@@ -10,13 +10,14 @@ public class Vendedor extends Funcionario implements Serializable {
         this.vendasMes = 0;
     }
 
-
+// PAREI TENTANDO FAZER O VENDER DO VENDEDOR
     // Métodos
-    public void vender(double valorVenda) {
-        this.vendasMes++;
-        comissao += 0.05 * valorVenda;
-        this.modificarSalario();
+    public boolean vender(int codigo, int quantidade, Estoque estoque) {
+
+        return estoque.vender(codigo, quantidade);
     }
+
+
 
     private void modificarSalario(){
         this.salario += comissao;

@@ -1,13 +1,22 @@
 import java.util.ArrayList;
 
 public class Estoque {
+   private static Estoque instance;
+
     private int qtdeTab;
     private int qtdeDig;
     ArrayList<Jogo> jogos = new ArrayList<>();
 
-    Estoque() {
+    private Estoque() {
         this.qtdeTab = 0;
         this.qtdeDig = 0;
+    }
+
+    public static  synchronized Estoque getInstance(){
+        if(instance == null){
+            instance = new Estoque();
+        }
+        return instance;
     }
 
     public void adicionarJogoTab(Jogo jogo){
@@ -33,22 +42,6 @@ public class Estoque {
         qtdeTab--;
     }
 
-    public int vender(int codigo, int quant){
-        Jogo jogoAux = null;
-
-        for(Jogo jogo : jogos){
-            if(jogo.codigo == codigo){
-                jogoAux = jogo;
-            }
-        }
-        if(jogoAux.getQuantidade() > 0){
-            jogoAux.setQuantidade(quant);
-            return 0;
-        }else {
-            return 1;
-        }
-    }
-
     public void removerJogoDig(int codigo){
         Jogo jogoAux = null;
 
@@ -62,6 +55,22 @@ public class Estoque {
         qtdeTab--;
     }
 
+    public boolean vender(int codigo, int quant){
+        Jogo jogoAux = null;
+
+        for(Jogo jogo : jogos){
+            if(jogo.codigo == codigo){
+                jogoAux = jogo;
+            }
+        }
+        if(jogoAux != null && jogoAux.getQuantidade() >= quant){
+            jogoAux.setQuantidade(jogoAux.getQuantidade() - quant);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public String mostrarJogos(){
         StringBuilder s = new StringBuilder();
 
@@ -70,5 +79,9 @@ public class Estoque {
         }
 
         return s.toString();
+    }
+
+    public ArrayList<Jogo> getJogos() {
+        return jogos;
     }
 }
