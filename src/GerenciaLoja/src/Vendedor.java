@@ -1,5 +1,5 @@
 import java.io.Serializable;
-import java.time.LocalDate;
+
 
 public class Vendedor extends Funcionario implements Serializable {
     protected double comissao;
@@ -16,6 +16,7 @@ public class Vendedor extends Funcionario implements Serializable {
             this.comissao += 0.05 * valorVenda;
             modificarSalario();
             this.comissao = 0;
+
 
             for (Jogo jogo : estoque.getJogos()) {
                 if (jogo.getCodigo() == codigo) {

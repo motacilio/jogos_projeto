@@ -6,7 +6,7 @@ public class Tabuleiro extends Jogo{
         this.qtdeJogadores = qtdeJogadores;
     }
 
-    public void mostrarInfo(){
+    public String mostraInfo(){
         String s = String.format("""
                 Nome:%s
                 Tipo: Tabuleiro
@@ -14,9 +14,9 @@ public class Tabuleiro extends Jogo{
                 Gênero: %s
                 Empresa: %s
                 Quantidade: %d
-                Valor:%f""", getNome(), getQtdeJogadores(), getGenero(), getEmpresa(), getQuantidade(), getValor());
+                Valor:%.2f""", getNome(), getQtdeJogadores(), getGenero(), getEmpresa(), getQuantidade(), getValor());
 
-        System.out.println(s);
+        return(s);
     }
 
     public int getQtdeJogadores() {

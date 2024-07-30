@@ -29,7 +29,8 @@ public class Estoque {
         qtdeDig += jogo.getQuantidade();
     }
 
-    public void removerJogoTab(int codigo){
+
+    public void removerJogo(int codigo){
         Jogo jogoAux = null;
 
         for(Jogo jogo : jogos){
@@ -39,21 +40,13 @@ public class Estoque {
         }
 
         jogos.remove(jogoAux);
-        qtdeTab--;
+
+        if(jogoAux instanceof Tabuleiro)
+            qtdeTab--;
+        else
+            qtdeDig--;
     }
 
-    public void removerJogoDig(int codigo){
-        Jogo jogoAux = null;
-
-        for(Jogo jogo : jogos){
-            if(jogo.codigo == codigo){
-                jogoAux = jogo;
-            }
-        }
-
-        jogos.remove(jogoAux);
-        qtdeTab--;
-    }
 
     public boolean verificarDisponibilidade(int codigo, int quantidade){
         for(Jogo jogo: jogos){
@@ -63,6 +56,7 @@ public class Estoque {
         }
         return false;
     }
+
 
     public void atualizarEstoque(int codigo, int quantidade){
         for(Jogo jogo: jogos){
@@ -82,14 +76,19 @@ public class Estoque {
         return null;
     }
 
-
-
-
     public String mostrarJogos(){
         StringBuilder s = new StringBuilder();
 
         for(Jogo jogo : jogos){
-            s.append(jogo.mostraInfo()).append("\n");
+            s.append("Jogos Digitais\n\n");
+            if(jogo instanceof Digital)
+                s.append(jogo.mostraInfo()).append("\n");
+        }
+
+        for(Jogo jogo : jogos){
+            s.append("\n\nJogos de Tabuleiro\n\n");
+            if(jogo instanceof Tabuleiro)
+                s.append(jogo.mostraInfo()).append("\n");
         }
 
         return s.toString();

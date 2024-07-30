@@ -31,16 +31,24 @@ public class Main {
         ObjectOutputStream ox = new ObjectOutputStream(fx);
 
         ox.writeObject(gerente);
+
+        ox.close();
+        fx.close();
     }
 
     public static void gravaVendedor(Vendedor vendedor) throws IOException {
-        boolean append = new File("vend.txt").exists();
-        FileOutputStream fx = new FileOutputStream("vend.txt", true);
-        ObjectOutputStream ox = append ? new AppendingObjectOutputStream(fx) : new ObjectOutputStream(fx);
+        try{
+            boolean append = new File("vend.txt").exists();
+            FileOutputStream fx = new FileOutputStream("vend.txt", true);
+            ObjectOutputStream ox = append ? new AppendingObjectOutputStream(fx) : new ObjectOutputStream(fx);
 
-        ox.writeObject(vendedor);
-        ox.close();
-        fx.close();
+            ox.writeObject(vendedor);
+            ox.close();
+            fx.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
     }
 
     public static ArrayList<Vendedor> instanciaFuncs() throws IOException {
@@ -67,26 +75,23 @@ public class Main {
 
         Estoque estoque = Estoque.getInstance();
 
-        gravaGerente(new Gerente("Cleber", "9845", 6000));
+        gravaGerente(new Gerente("Bruno", "9876", 6000));
         Gerente gerente = instanciaGerente();
         gerente.setMatricula(1);
 
-        gravaVendedor(new Vendedor("Bruna", "1234", 2000));
-        gravaVendedor(new Vendedor("Mário", "3654", 2240));
-        gravaVendedor(new Vendedor("Paulo", "8745", 3000));
-        gravaVendedor(new Vendedor("Joaquina", "0987", 3700));
-
         ArrayList<Vendedor> vendedores = instanciaFuncs();
 
-        System.out.println(gerente.getNome() +"-"+ gerente.matricula);
+        System.out.println("Gerente\n"+gerente.getNome() +"-"+ gerente.matricula + "\n");
 
+        System.out.println("Vendedores\n");
         for (Vendedor vendedor : vendedores) {
             System.out.println(vendedor.getNome() +"-"+ vendedor.matricula);
         }
+        System.out.println();
 
-        String commonPassword = "senha";
-        int GerenteMatricula = 1000;
-        String GerenteSenha = "admin";
+        String senhaComum = "senha";
+        int gerenteMatricula = 1;
+        String gerenteSenha = "admin";
 
         // Mostrar tela de login
         JTextField usernameField = new JTextField();
@@ -102,12 +107,12 @@ public class Main {
                 int matricula = Integer.parseInt(usernameField.getText());
                 String senha = new String(passwordField.getPassword());
 
-                if (matricula == GerenteMatricula && senha.equals(GerenteSenha)) {
+                if (matricula == gerenteMatricula && senha.equals(gerenteSenha)) {
                     //Logando no modo de usuário Funcionário
                     JOptionPane.showMessageDialog(null, "Bem-vindo Gerente!");
-                    visaogerente();
+                    visaogerente(gerente, estoque);
                     break;
-                } else  {
+                } else  if(senha.equals(senhaComum)){
                     Vendedor vendedorLogado = null;
 
                     for(Vendedor vendedor: vendedores){
@@ -131,6 +136,7 @@ public class Main {
             }
         }
 
+        JOptionPane.showMessageDialog(null, estoque.mostrarJogos());
         JOptionPane.showMessageDialog(null, "Finalizando Programa");
     }
 
@@ -141,41 +147,117 @@ public class Main {
 
     }
 
-    private static void visaogerente() {
-        // Definir cores personalizadas
-        UIManager.put("OptionPane.background", new ColorUIResource(255, 255, 255));
-        UIManager.put("Panel.background", new ColorUIResource(255, 255, 255));
-        UIManager.put("Button.background", new ColorUIResource(240, 240, 240));
-        UIManager.put("Button.foreground", new ColorUIResource(22, 24, 66));
-        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 14));
-        UIManager.put("Button.font", new Font("Arial", Font.PLAIN, 12));
+    private static void visaogerente(Gerente gerente, Estoque estoque) throws IOException {
 
-        String opcoes[] = {
-                "Cadastrar Jogo", "Excluir Jogo", "Cadastrar Funcionário"
-        };
+        loopExterno:
+        do{
+            String opcoes[] = new String[]{
+                "Cadastrar Jogo", "Excluir Jogo", "Cadastrar Funcionário", "Mostra Estoque", "Voltar"
+            };
 
-        JPanel painel = new JPanel();
-        painel.setLayout(new BorderLayout(10, 10));
-        painel.setPreferredSize(new Dimension(300, 150));
+            JPanel painel = new JPanel();
+            painel.setLayout(new BorderLayout(5, 5));
+            painel.setPreferredSize(new Dimension(80, 80));
 
-        JLabel titulo = new JLabel("Escolha uma opção!", JLabel.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 18));
-        painel.add(titulo, BorderLayout.NORTH);
+            JLabel titulo = new JLabel("Gerência Lojas MIHL", JLabel.CENTER);
+            titulo.setFont(new Font("Arial", Font.BOLD, 18));
+            painel.add(titulo, BorderLayout.NORTH);
 
-        int opcaoSelecionada = JOptionPane.showOptionDialog(
-                null,
-                painel,
-                "Gerenciamento",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                opcoes,
-                opcoes[0]
-        );
+            int opcaoSelecionada = JOptionPane.showOptionDialog(
+                    null,
+                    painel,
+                    "Gerenciamento",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opcoes,
+                    opcoes[0]
+            );
 
-        if (opcaoSelecionada != JOptionPane.CLOSED_OPTION) {
-            System.out.println("Opção selecionada: " + opcoes[opcaoSelecionada]);
-        }
+            while(true){
+                if (opcaoSelecionada != JOptionPane.CLOSED_OPTION) {
+                    switch (opcaoSelecionada) {
+                        case 0:
+                            opcoes = new String[] {
+                                "Jogo digital", "Jogo de Tabuleiro", "Voltar"
+                            };
+        
+                            opcaoSelecionada = JOptionPane.showOptionDialog(
+                                            null,
+                                            painel,
+                                            "Gerenciamento",
+                                            JOptionPane.OK_CANCEL_OPTION,
+                                            JOptionPane.QUESTION_MESSAGE,
+                                            null,
+                                            opcoes,
+                                            opcoes[0]
+                                            );
+
+                            switch (opcaoSelecionada) {
+                                case 0:
+                                    gerente.cadstrarJogo(estoque, 2);
+                                    continue loopExterno;
+                                case 1:
+                                    gerente.cadstrarJogo(estoque, 1);
+                                    continue loopExterno;
+                                case 2:
+                                    continue loopExterno;
+                                default:
+                                    break;
+                            }
+                            continue loopExterno;
+                        
+                        case 1:
+                            if(estoque.mostrarJogos().equals("")){
+                                JOptionPane.showMessageDialog(null,
+                                                            "Não tem jogos cadastrados!");
+                                continue loopExterno;
+                            }    
+
+                            String cod = JOptionPane.showInputDialog(null, 
+                                                        estoque.mostrarJogos() + 
+                                                        "\n Digite o codigo do Jogo?"); 
+
+                            gerente.excluirJogo(estoque, Integer.parseInt(cod));
+                            
+                            continue loopExterno;
+
+                        case 2:
+                            JTextField nome = new JTextField();
+                            JTextField cpf = new JTextField();
+                            JTextField salario = new JTextField();
+
+                            Object[] campos = {
+                                "Nome:", nome, "CPF:", cpf, "Salário", salario
+                            };
+
+                            JOptionPane.showConfirmDialog(
+                                            null, 
+                                            campos, 
+                                            "Adicionar Vendedor", 
+                                            JOptionPane.OK_CANCEL_OPTION);
+
+                            Vendedor vendedor = new Vendedor(nome.getText(), cpf.getText(), Double.parseDouble(salario.getText()));
+                            gravaVendedor(vendedor);
+                            continue loopExterno;
+
+                        case 3:
+                            if(estoque.mostrarJogos().equals("")){
+                                JOptionPane.showMessageDialog(null,
+                                                            "Não tem jogos cadastrados!");
+                                continue loopExterno;
+                            }else{
+                                JOptionPane.showMessageDialog(null,estoque.mostrarJogos());
+                                continue loopExterno;
+                            }
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
+        }while(true);
     }
 
     public static class AppendingObjectOutputStream extends ObjectOutputStream {

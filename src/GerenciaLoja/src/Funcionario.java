@@ -1,9 +1,9 @@
 import java.io.Serializable;
-import java.time.LocalDate;
 
+@SuppressWarnings("unused")
 public class Funcionario extends Pessoa implements Serializable {
 
-    private static int matriculaAtual = 2;
+    private static int matriculaAtual = 1;
     protected int matricula;
     protected double salario;
 
