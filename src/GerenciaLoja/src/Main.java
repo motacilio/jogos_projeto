@@ -67,26 +67,22 @@ public class Main {
 
         Estoque estoque = Estoque.getInstance();
 
-        gravaGerente(new Gerente("Cleber", "9845", 6000));
         Gerente gerente = instanciaGerente();
         gerente.setMatricula(1);
 
-        gravaVendedor(new Vendedor("Bruna", "1234", 2000));
-        gravaVendedor(new Vendedor("Mário", "3654", 2240));
-        gravaVendedor(new Vendedor("Paulo", "8745", 3000));
-        gravaVendedor(new Vendedor("Joaquina", "0987", 3700));
-
         ArrayList<Vendedor> vendedores = instanciaFuncs();
 
-        System.out.println(gerente.getNome() +"-"+ gerente.matricula);
+        System.out.println("Gerente\n"+gerente.getNome() +"-"+ gerente.matricula + "\n");
 
+        System.out.println("Vendedores\n");
         for (Vendedor vendedor : vendedores) {
             System.out.println(vendedor.getNome() +"-"+ vendedor.matricula);
         }
+        System.out.println();
 
-        String commonPassword = "senha";
-        int GerenteMatricula = 1000;
-        String GerenteSenha = "admin";
+        String senhaComum = "senha";
+        int gerenteMatricula = 1;
+        String gerenteSenha = "admin";
 
         // Mostrar tela de login
         JTextField usernameField = new JTextField();
@@ -102,12 +98,12 @@ public class Main {
                 int matricula = Integer.parseInt(usernameField.getText());
                 String senha = new String(passwordField.getPassword());
 
-                if (matricula == GerenteMatricula && senha.equals(GerenteSenha)) {
+                if (matricula == gerenteMatricula && senha.equals(gerenteSenha)) {
                     //Logando no modo de usuário Funcionário
                     JOptionPane.showMessageDialog(null, "Bem-vindo Gerente!");
                     visaogerente();
                     break;
-                } else  {
+                } else  if(senha.equals(senhaComum)){
                     Vendedor vendedorLogado = null;
 
                     for(Vendedor vendedor: vendedores){

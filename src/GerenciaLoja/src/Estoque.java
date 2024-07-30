@@ -55,7 +55,7 @@ public class Estoque {
         qtdeTab--;
     }
 
-    public boolean vender(int codigo, int quant){
+    public double vender(int codigo, int quant){
         Jogo jogoAux = null;
 
         for(Jogo jogo : jogos){
@@ -65,9 +65,9 @@ public class Estoque {
         }
         if(jogoAux != null && jogoAux.getQuantidade() >= quant){
             jogoAux.setQuantidade(jogoAux.getQuantidade() - quant);
-            return true;
+            return jogoAux.getValor();
         }else {
-            return false;
+            return 0;
         }
     }
 

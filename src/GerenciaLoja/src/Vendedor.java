@@ -14,7 +14,9 @@ public class Vendedor extends Funcionario implements Serializable {
     // Métodos
     public boolean vender(int codigo, int quantidade, Estoque estoque) {
 
-        return estoque.vender(codigo, quantidade);
+        estoque.vender(codigo, quantidade);
+
+        return true;
     }
 
 
