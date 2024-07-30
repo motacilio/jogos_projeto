@@ -5,12 +5,11 @@ public class Aluguel {
     protected int codigo;
 
     protected Jogo jogo;
-
     protected final int tempoDevDias = 3;
     protected LocalDate dataAluguel;
-    protected int diasDeAtraso = 0;
+    //protected int diasDeAtraso = 0;
 
-    Aluguel (Jogo jogo, Estoque estoque) {
+    Aluguel (Jogo jogo) {
         this.codigo = ++countCodigo;
         this.jogo = jogo;
         this.dataAluguel = LocalDate.now();
@@ -23,21 +22,26 @@ public class Aluguel {
 
     // Método para verificar se houve atraso na devolução
     public boolean atraso(){
-        LocalDate dataDevolucao = dataDevolucao();
-        return LocalDate.now().isAfter(dataDevolucao);
+        return LocalDate.now().isAfter(dataDevolucao());
     }
 
     // Método para calcular a multa
     public double verificarMulta() {
         if (atraso()) {
-            diasDeAtraso = (int) dataDevolucao().until(LocalDate.now()).getDays();
-            if(diasDeAtraso < -1){
-                return 0;
-            }else{
-                return 3.50 * diasDeAtraso;
-            }
+            long diasDeAtraso = LocalDate.now().toEpochDay() - dataDevolucao().toEpochDay();
+            return 3.5 * diasDeAtraso;
         } else {
             return 0;
         }
     }
+
+    public void renovar(){
+        this.dataAluguel = LocalDate.now();
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+
 }

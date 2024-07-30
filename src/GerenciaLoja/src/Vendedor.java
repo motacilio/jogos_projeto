@@ -3,20 +3,54 @@ import java.time.LocalDate;
 
 public class Vendedor extends Funcionario implements Serializable {
     protected double comissao;
-    protected int vendasMes;
 
     Vendedor (String nome, String cpf, double salario) {
         super(nome, cpf, salario);
-        this.vendasMes = 0;
     }
 
-// PAREI TENTANDO FAZER O VENDER DO VENDEDOR
     // Métodos
-    public boolean vender(int codigo, int quantidade, Estoque estoque) {
+    public boolean vender(Cliente cliente, int codigo, int quantidade, Estoque estoque){
+        if(estoque.verificarDisponibilidade(codigo, quantidade)){
+            estoque.atualizarEstoque(codigo, quantidade);
+            double valorVenda = quantidade * obterValorJogo(codigo, estoque);
+            this.comissao += 0.05 * valorVenda;
+            modificarSalario();
+            this.comissao = 0;
 
-        return estoque.vender(codigo, quantidade);
+            for (Jogo jogo : estoque.getJogos()) {
+                if (jogo.getCodigo() == codigo) {
+                    cliente.adicionarCompra(jogo, quantidade);
+                    break;
+                }
+            }
+
+            return true;
+        }
+        return false;
     }
 
+    public boolean processarAluguel(Cliente cliente, int codigo, Estoque estoque){
+        if(estoque.verificarDisponibilidade(codigo, 1)){
+            Jogo jogo = estoque.getJogo(codigo);
+            Aluguel aluguel = new Aluguel(jogo);
+
+            cliente.getAlugueis().add(aluguel);
+            estoque.atualizarEstoque(codigo, 1);
+            cliente.setNumAluguel(cliente.getNumAluguel() + 1);
+
+            return true;
+        }
+        return false;
+    }
+
+    private double obterValorJogo(int codigo, Estoque estoque){
+        for(Jogo jogo: estoque.getJogos()){
+            if(jogo.getCodigo() == codigo){
+                return jogo.getValor();
+            }
+        }
+        return 0;
+    }
 
 
     private void modificarSalario(){
@@ -29,16 +63,9 @@ public class Vendedor extends Funcionario implements Serializable {
         return comissao;
     }
 
-    public int getVendasMes() {
-        return vendasMes;
-    }
-
     // Sets
     public void setComissao(double comissao) {
         this.comissao = comissao;
     }
 
-    public void setVendasMes(int vendasMes) {
-        this.vendasMes = vendasMes;
-    }
 }

@@ -16,11 +16,20 @@ public abstract class Jogo {
         this.empresa = empresa;
     }
 
+
     public String mostraInfo(){
         String s = ("Nome do jogo: " + nome + "\nValor: " + valor + "\nQuantidade do jogo: " + quantidade +
                 '\n' + "Genero: " + genero + "\nEmpresa: " + empresa);
 
     return s;
+    }
+
+    public static int getCodigoAtual() {
+        return codigoAtual;
+    }
+
+    public int getCodigo() {
+        return codigo;
     }
 
     public int getQuantidade() {
