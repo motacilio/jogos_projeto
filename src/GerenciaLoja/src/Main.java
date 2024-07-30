@@ -62,13 +62,9 @@ public class Main {
                 vend = (Vendedor) ox.readObject();
                 v.add(vend);
             } catch (EOFException | ClassNotFoundException e) {
-                break;
+                return null;
             }
         }
-        ox.close();
-        fx.close();
-
-        return v;
     }
 
     public static void main(String[] args) throws IOException {
