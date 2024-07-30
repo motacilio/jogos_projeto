@@ -1,5 +1,5 @@
 public abstract class Jogo {
-    protected static int codigoAtual = 0;
+    protected static int codigoAtual = 1;
     protected int codigo;
     protected int quantidade;
     protected String nome;
@@ -16,12 +16,7 @@ public abstract class Jogo {
         this.empresa = empresa;
     }
 
-    public String mostraInfo(){
-        String s = ("Nome do jogo: " + nome + "\nValor: " + valor + "\nQuantidade do jogo: " + quantidade +
-                '\n' + "Genero: " + genero + "\nEmpresa: " + empresa);
-
-    return s;
-    }
+    public abstract String mostraInfo();
 
     public int getQuantidade() {
         return quantidade;

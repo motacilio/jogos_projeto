@@ -9,7 +9,7 @@ public class Digital extends Jogo{
         this.plataforma = plataforma;
     }
 
-    public void mostrarInfo(){
+    public String mostraInfo(){
         String s = String.format("""
                 Nome:%s
                 Tipo: Digital
@@ -18,9 +18,9 @@ public class Digital extends Jogo{
                 Gênero: %s
                 Empresa: %s
                 Quantidade: %d
-                Valor:%f""", getNome(), getPlataforma(), getConectividade(), getGenero(), getEmpresa(), getQuantidade(), getValor());
+                Valor:%.2f""", getNome(), getPlataforma(), getConectividade(), getGenero(), getEmpresa(), getQuantidade(), getValor());
 
-        System.out.println(s);
+        return(s);
     }
 
     public String getPlataforma() {
