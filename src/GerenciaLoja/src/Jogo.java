@@ -14,6 +14,7 @@ public abstract class Jogo {
         this.quantidade = quantidade;
         this.genero = genero;
         this.empresa = empresa;
+    }
    
     public abstract String mostraInfo();
 
