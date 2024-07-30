@@ -12,7 +12,7 @@ public class Estoque {
         this.qtdeDig = 0;
     }
 
-    public static  synchronized Estoque getInstance(){
+    public static synchronized Estoque getInstance(){
         if(instance == null){
             instance = new Estoque();
         }
@@ -47,20 +47,33 @@ public class Estoque {
             qtdeDig--;
     }
 
-    public double vender(int codigo, int quant){
-        Jogo jogoAux = null;
 
-        for(Jogo jogo : jogos){
-            if(jogo.codigo == codigo){
-                jogoAux = jogo;
+    public boolean verificarDisponibilidade(int codigo, int quantidade){
+        for(Jogo jogo: jogos){
+            if(jogo.getCodigo() == codigo && jogo.getQuantidade() >= quantidade){
+               return true;
             }
         }
-        if(jogoAux != null && jogoAux.getQuantidade() >= quant){
-            jogoAux.setQuantidade(jogoAux.getQuantidade() - quant);
-            return jogoAux.getValor();
-        }else {
-            return 0;
+        return false;
+    }
+
+
+    public void atualizarEstoque(int codigo, int quantidade){
+        for(Jogo jogo: jogos){
+            if(jogo.getCodigo() == codigo){
+                jogo.setQuantidade(jogo.getQuantidade() - quantidade);
+                break;
+            }
         }
+    }
+
+    public Jogo getJogo(int codigo) {
+        for (Jogo jogo : jogos) {
+            if (jogo.getCodigo() == codigo) {
+                return jogo;
+            }
+        }
+        return null;
     }
 
     public String mostrarJogos(){

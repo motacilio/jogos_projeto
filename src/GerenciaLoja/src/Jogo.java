@@ -14,9 +14,16 @@ public abstract class Jogo {
         this.quantidade = quantidade;
         this.genero = genero;
         this.empresa = empresa;
+   
+    public abstract String mostraInfo();
+
+    public static int getCodigoAtual() {
+        return codigoAtual;
     }
 
-    public abstract String mostraInfo();
+    public int getCodigo() {
+        return codigo;
+    }
 
     public int getQuantidade() {
         return quantidade;

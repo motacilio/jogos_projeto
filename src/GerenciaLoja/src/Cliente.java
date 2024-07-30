@@ -1,5 +1,3 @@
-import java.awt.dnd.DragGestureEvent;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +5,7 @@ public class Cliente extends Pessoa {
     protected int numCompras;
     protected int numAluguel;
     List<Aluguel> alugueis = new ArrayList<>();
+    List<Jogo> compras = new ArrayList<>();
 
     Cliente (String nome, String cpf) {
         super(nome, cpf);
@@ -15,6 +14,13 @@ public class Cliente extends Pessoa {
     }
 
     // Métodos Extras
+
+    public void adicionarCompra(Jogo jogo, int quantidade){
+        for(int i = 0; i < quantidade; i++){
+            compras.add(jogo);
+        }
+        numCompras += quantidade;
+    }
 
     private int qtdeAtrasos(){
         int num = 0;
@@ -26,32 +32,8 @@ public class Cliente extends Pessoa {
         return num;
     }
 
-    public boolean alugar(Estoque estoque, int codigo) {
-        Jogo jogoAux = null;
-
-        if(this.qtdeAtrasos() > 0){
-            return false;
-        }
-
-        for(Jogo jogo : estoque.jogos){
-            if(jogo.codigo == codigo){
-                jogoAux = jogo;
-                break;
-            }
-        }
-
-        Aluguel aluguelAux = new Aluguel(jogoAux, estoque);
-
-        int quantidade = jogoAux.getQuantidade();
-
-        if(quantidade < 10){
-            return false;
-        }else{
-            alugueis.add(aluguelAux);
-            jogoAux.quantidade--;
-        }
-
-        return true;
+    public boolean solicitarAluguel(int codigo, Vendedor vendedor, Estoque estoque){
+        return vendedor.processarAluguel(this, codigo, estoque);
     }
 
     public double devolver(Estoque estoque, int codigo) {
@@ -69,17 +51,21 @@ public class Cliente extends Pessoa {
 
     }
 
-    public int renovarAluguel(int codigo, Estoque estoque) {
-        if(this.qtdeAtrasos() > 0){
+    public int renovarAluguel(int codigo) {
+        if (this.qtdeAtrasos() > 0) {
             return 1;
-        }else{
-            this.alugar(estoque, codigo);
+            // cliente possui alugueis atrasados
         }
-        return 0;
-    }
 
-    public void comprar(Estoque estoque, int codigo, int quant) {
-        estoque.vender(codigo, quant);
+        for (Aluguel aluguel : alugueis) {
+            if (aluguel.getCodigo() == codigo) {
+                aluguel.renovar();
+                //Sucesso
+                return 0;
+            }
+        }
+        //Aluguel nao encontrado
+        return 2;
     }
 
     public void mostrarAlugueis() {
