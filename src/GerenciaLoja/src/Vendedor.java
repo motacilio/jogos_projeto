@@ -10,6 +10,18 @@ public class Vendedor extends Funcionario implements Serializable {
         this.vendasMes = 0;
     }
 
+
+    // Métodos
+    public void vender(double valorVenda) {
+        this.vendasMes++;
+        comissao += 0.05 * valorVenda;
+        this.modificarSalario();
+    }
+
+    private void modificarSalario(){
+        this.salario += comissao;
+    }
+
     // Gets
 
     public double getComissao() {
@@ -27,16 +39,5 @@ public class Vendedor extends Funcionario implements Serializable {
 
     public void setVendasMes(int vendasMes) {
         this.vendasMes = vendasMes;
-    }
-
-    // Métodos
-    public void vender(double valorVenda) {
-        this.vendasMes++;
-        comissao += 0.05 * valorVenda;
-        this.modificarSalario();
-    }
-
-    private void modificarSalario(){
-        this.salario += comissao;
     }
 }

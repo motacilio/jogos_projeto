@@ -34,8 +34,8 @@ public class Main {
     }
 
     public static void gravaVendedor(Vendedor vendedor) throws IOException {
-        boolean append = new File("Funcs.txt").exists();
-        FileOutputStream fx = new FileOutputStream("Funcs.txt", true);
+        boolean append = new File("vend.txt").exists();
+        FileOutputStream fx = new FileOutputStream("vend.txt", true);
         ObjectOutputStream ox = append ? new AppendingObjectOutputStream(fx) : new ObjectOutputStream(fx);
 
         ox.writeObject(vendedor);
@@ -46,7 +46,7 @@ public class Main {
     public static ArrayList<Vendedor> instanciaFuncs() throws IOException {
         ArrayList<Vendedor> v = new ArrayList<>();
         Vendedor vend;
-        FileInputStream fx = new FileInputStream("Funcs.txt");
+        FileInputStream fx = new FileInputStream("vend.txt");
         ObjectInputStream ox = new ObjectInputStream(fx);
 
         while (true) {
@@ -67,7 +67,7 @@ public class Main {
 
         gravaGerente(new Gerente("Cleber", "9845", 6000));
         Gerente gerente = instanciaGerente();
-        gerente.setMatricula(1000);
+        gerente.setMatricula(1);
 
         gravaVendedor(new Vendedor("Bruna", "1234", 2000));
         gravaVendedor(new Vendedor("Mário", "3654", 2240));
@@ -83,49 +83,61 @@ public class Main {
         }
 
         int funcionario = 0;
-        String commonPassword = "password";
-        int managerUser = 1000;
-        String managerPassword = "senhagerente";
+        String commonPassword = "senha";
+        int GerenteMatricula = 1000;
+        String GerenteSenha = "admin";
 
         // Mostrar tela de login
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
         Object[] message = {
-                "Username:", usernameField,
-                "Password:", passwordField
+                "Matrícula:", usernameField,
+                "Senha:", passwordField
         };
 
         while(true) {
             int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
-                int username = Integer.parseInt(usernameField.getText());
-                String password = new String(passwordField.getPassword());
-                if (username == funcionario && password.equals(commonPassword)) {
+                int matricula = Integer.parseInt(usernameField.getText());
+                String senha = new String(passwordField.getPassword());
+
+                if (matricula == GerenteMatricula && senha.equals(GerenteSenha)) {
                     //Logando no modo de usuário Funcionário
-                    JOptionPane.showMessageDialog(null, "Bem-vindo, funcionário comum!");
-                    visaoFuncionario();
-                    break;
-                } else if (username == managerUser && password.equals(managerPassword)) {
-                    //Logando no modo de usuário Gerente
-                    JOptionPane.showMessageDialog(null, "Bem-vindo, gerente!");
+                    JOptionPane.showMessageDialog(null, "Bem-vindo Gerente!");
                     visaogerente();
                     break;
-                } else {
-                    // Credenciais inválidas
-                    JOptionPane.showMessageDialog(null, "Login ou senha inválidos.");
-                    continue;
+                } else  {
+                    Vendedor vendedorLogado = null;
+
+                    for(Vendedor vendedor: vendedores){
+                        if(vendedor.getMatricula() == matricula){
+                            vendedorLogado = vendedor;
+                            break;
+                        }
+                    }
+                    if(vendedorLogado != null){
+                        JOptionPane.showMessageDialog(null, "Bem-Vindo " + vendedorLogado.getNome() + "!");
+                        visaoVendedor(vendedorLogado);
+                    }else {
+                        // Credenciais inválidas
+                        JOptionPane.showMessageDialog(null, "Login ou senha inválidos.");
+                        continue;
+                    }
                 }
+
             }else{
                 break;
             }
         }
 
-        JOptionPane.showMessageDialog(null, "Dou meu toba!!!");
+        JOptionPane.showMessageDialog(null, "Finalizando Programa");
     }
 
-    private static void visaoFuncionario() {
+    private static void visaoVendedor(Vendedor vendedorLogado) {
 
         JOptionPane.showMessageDialog(null, "Tela do Funcionário Comum");
+
+
     }
 
     private static void visaogerente() {

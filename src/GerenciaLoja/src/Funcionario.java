@@ -3,7 +3,7 @@ import java.time.LocalDate;
 
 public class Funcionario extends Pessoa implements Serializable {
 
-    private static int matriculaAtual = 0;
+    private static int matriculaAtual = 2;
     protected int matricula;
     protected double salario;
 
@@ -18,6 +18,10 @@ public class Funcionario extends Pessoa implements Serializable {
     public void mostrarInfo(){
         System.out.println("Nome: " + this.getNome() + "\nCPF: " + this.getCpf()+
                 "\nSalario: " + this.getSalario());
+    }
+
+    public int getMatricula() {
+        return matricula;
     }
 
     public double getSalario() {
