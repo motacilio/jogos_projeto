@@ -3,6 +3,7 @@ import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -69,9 +70,20 @@ public class Main {
             }
     }
 
+    public static Cliente encontraCliente(String cpf, List<Cliente> clientes){
+        for(Cliente cliente: clientes){
+            if(cliente.getCpf().equals(cpf)){
+                return cliente;
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) throws IOException {
 
         Estoque estoque = Estoque.getInstance();
+        List<Cliente> clientes = new ArrayList<>();
+
 
         gravaGerente(new Gerente("Bruno", "9876", 6000));
         Gerente gerente = instanciaGerente();
@@ -121,7 +133,7 @@ public class Main {
                     }
                     if(vendedorLogado != null){
                         JOptionPane.showMessageDialog(null, "Bem-Vindo " + vendedorLogado.getNome() + "!");
-                        visaoVendedor(vendedorLogado);
+                        visaoVendedor(vendedorLogado, estoque, clientes);
                     }else {
                         // Credenciais inválidas
                         JOptionPane.showMessageDialog(null, "Login ou senha inválidos.");
@@ -138,9 +150,73 @@ public class Main {
         JOptionPane.showMessageDialog(null, "Finalizando Programa");
     }
 
-    private static void visaoVendedor(Vendedor vendedorLogado) {
+    private static void visaoVendedor(Vendedor vendedorLogado, Estoque estoque, List<Cliente> clientes) {
 
         JOptionPane.showMessageDialog(null, "Tela do Funcionário Comum");
+
+        loopExterno:
+        do{
+            String opcoes[] = new String[]{
+                "Vender", "Alugar", "Cadastrar Cliente"
+            };
+
+
+            JPanel painel = new JPanel();
+            painel.setLayout(new BorderLayout(5, 5));
+            painel.setPreferredSize(new Dimension(80, 80));
+
+            JLabel titulo = new JLabel("Comércio", JLabel.CENTER);
+            titulo.setFont(new Font("Arial", Font.BOLD, 18));
+            painel.add(titulo, BorderLayout.NORTH);
+
+            int opcaoSelecionada = JOptionPane.showOptionDialog(
+                null, 
+                painel, 
+                "Comércio", 
+                JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, 
+                null,
+                opcoes, 
+                opcoes[0]
+            );
+
+            while (true) {
+                if(opcaoSelecionada != JOptionPane.CLOSED_OPTION){
+                    switch (opcaoSelecionada) {
+                        case 0:
+                            JTextField cpf = new JTextField();
+
+                            Object[] campos = {
+                                "CPF do Cliente:", cpf
+                            };
+
+                            JOptionPane.showConfirmDialog(null, 
+                            campos, 
+                            "Procurar Cliente", 
+                            JOptionPane.OK_CANCEL_OPTION);
+
+                            Cliente clienteAtual = encontraCliente(cpf.getText(), clientes);
+                            if(clienteAtual != null){
+
+                            } else {
+                                JOptionPane.showMessageDialog(null, 
+                                "Cliente não encontrado");
+                                continue loopExterno;
+                            }
+
+
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                }
+            }
+
+
+
+
+        } while(true);
 
 
     }
