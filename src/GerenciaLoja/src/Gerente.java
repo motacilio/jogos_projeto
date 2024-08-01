@@ -1,9 +1,5 @@
+import javax.swing.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Scanner;
-
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 public class Gerente extends Funcionario implements Serializable {
 
@@ -19,10 +15,12 @@ public class Gerente extends Funcionario implements Serializable {
         this.comissao = comissao;
     }
 
-    public void modificarSalario(){
+    public double modificarSalario(){
         this.salario += comissao;
+        return this.salario;
     }
 
+// Colocar a Entrada de dados dos jogos na Main ?
     void cadstrarJogo(Estoque estoque, int opcao){
         if(opcao == 1){
             JTextField nome = new JTextField();
@@ -80,5 +78,5 @@ public class Gerente extends Funcionario implements Serializable {
 
     public void excluirJogo(Estoque estoque, int opcao){
             estoque.removerJogo(codigo);
-    };
+    }
 }
