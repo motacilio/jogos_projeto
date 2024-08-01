@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TesteGerente {
 
@@ -12,7 +11,9 @@ public class TesteGerente {
 
         assertEquals(6500.00, gerente.modificarSalario(), 0.0001);
 
-        System.out.println("FIM DO TESTE DE MODIFICAR SALÁRIO!");
+        System.out.println("PASSOU NO TESTE DE MODIFICAR SALARIO!");
     }
+
+
 
 }
