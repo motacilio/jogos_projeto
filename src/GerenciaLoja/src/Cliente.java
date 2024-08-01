@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,14 @@ public class Cliente extends Pessoa {
     public void mostrarAlugueis() {
         for(Aluguel aluguel: alugueis){
             System.out.println(aluguel.jogo.getNome());
+        }
+    }
+
+    public void adicionarAluguel(Aluguel aluguel){
+        if(aluguel != null){
+            this.alugueis.add(aluguel);
+        } else{
+            JOptionPane.showMessageDialog(null, "Falha ao adicionar aluguel");
         }
     }
 

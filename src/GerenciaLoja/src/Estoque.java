@@ -64,7 +64,12 @@ public class Estoque {
     public void atualizarEstoque(int codigo, int quantidade){
         for(Jogo jogo: jogos){
             if(jogo.getCodigo() == codigo){
-                jogo.setQuantidade(jogo.getQuantidade() - quantidade);
+                int novaQuantidade = jogo.getQuantidade() - quantidade;
+                if(novaQuantidade >= 0){
+                    jogo.setQuantidade(novaQuantidade);
+                } else{
+                    throw new IllegalArgumentException("Quantidade insuficiente no estoque!");
+                }
                 break;
             }
         }

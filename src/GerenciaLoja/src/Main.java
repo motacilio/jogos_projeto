@@ -159,7 +159,7 @@ public class Main {
 
         loopExterno:
         do{
-            String opcoes[] = new String[]{
+            String[] opcoes = new String[]{
                     "Vender", "Alugar", "Cadastrar Cliente", "Renovar Aluguel", "Voltar"
             };
 
@@ -187,46 +187,58 @@ public class Main {
                 if(opcaoSelecionada != JOptionPane.CLOSED_OPTION){
                     switch (opcaoSelecionada) {
                         case 0:
-                            JTextField cpf = new JTextField();
+                            JTextField cpfVenda = new JTextField();
 
                             Object[] campos = {
-                                    "CPF do Cliente:", cpf
+                                    "CPF do Cliente:", cpfVenda
                             };
 
-                            JOptionPane.showConfirmDialog(null,
+                            int resultadoVenda = JOptionPane.showConfirmDialog(
+                                    null,
                                     campos,
                                     "Procurar Cliente",
                                     JOptionPane.OK_CANCEL_OPTION);
 
-                            Cliente clienteAtual = encontraCliente(cpf.getText(), clientes);
-                            if(clienteAtual != null){
-                                JTextField codigo = new JTextField();
-                                JTextField quantidade = new JTextField();
+                            if(resultadoVenda == JOptionPane.OK_OPTION){
+                                Cliente clienteAtual = encontraCliente(cpfVenda.getText(), clientes);
+                                if(clienteAtual != null){
+                                    JTextField codigo = new JTextField();
+                                    JTextField quantidade = new JTextField();
 
-                                Object[] dadosVenda = {
-                                        "Código do jogo:", codigo, "Quantidade:", quantidade
-                                };
+                                    Object[] dadosVenda = {
+                                            "Código do jogo:", codigo, "Quantidade:", quantidade
+                                    };
 
-                                JOptionPane.showConfirmDialog(
-                                        null,
-                                        dadosVenda,
-                                        "Dados da Venda",
-                                        JOptionPane.OK_CANCEL_OPTION
-                                );
+                                    int resultadoDadosVenda = JOptionPane.showConfirmDialog(
+                                            null,
+                                            dadosVenda,
+                                            "Dados da Venda",
+                                            JOptionPane.OK_CANCEL_OPTION
+                                    );
 
-                                boolean venda = vendedorLogado.vender(clienteAtual, Integer.parseInt(codigo.getText()), Integer.parseInt(quantidade.getText()), estoque);
-                                if(venda){
-                                    JOptionPane.showMessageDialog(null, "Venda Realizada!");
-                                    continue loopExterno;
-                                } else{
-                                    JOptionPane.showMessageDialog(null, "Jogo não encontrado");
-                                    continue loopExterno;
+                                    if(resultadoDadosVenda == JOptionPane.OK_OPTION){
+                                        if(!codigo.getText().isBlank() || !quantidade.getText().isBlank()){
+                                            try{
+                                                int codigoInt = Integer.parseInt(codigo.getText());
+                                                int quantidadeInt = Integer.parseInt(quantidade.getText());
+                                                boolean venda = vendedorLogado.vender(clienteAtual, codigoInt, quantidadeInt, estoque);
+                                                if(venda){
+                                                    JOptionPane.showMessageDialog(null, "Venda Realizada!");
+                                                } else{
+                                                    JOptionPane.showMessageDialog(null, "Jogo não encontrado ou quantidade insuficiente");
+                                                }
+                                            } catch (NumberFormatException e){
+                                                JOptionPane.showMessageDialog(null, "Digite valores numéricos válidos para o código e quantidade!");
+                                            }
+                                        } else{
+                                            JOptionPane.showMessageDialog(null,"Digite dados válidos!");
+                                        }
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Cliente não encontrado");
                                 }
-                            } else {
-                                JOptionPane.showMessageDialog(null,
-                                        "Cliente não encontrado");
-                                continue loopExterno;
                             }
+                            continue loopExterno;
 
                         case 1:
                             JTextField cpfAluguel = new JTextField();
@@ -236,30 +248,33 @@ public class Main {
                                     "CPF:", cpfAluguel, "Código do Jogo:", codigoJogoAlugar
                             };
 
-                            JOptionPane.showConfirmDialog(
+                            int resultado = JOptionPane.showConfirmDialog(
                                     null,
                                     camposAluguel,
-                                    "Dados Aluguel",
+                                    "Dados do Aluguel",
                                     JOptionPane.OK_CANCEL_OPTION
                             );
 
-                            if(cpfAluguel.getText().isBlank() || codigoJogoAlugar.getText().isBlank()){
-                                JOptionPane.showMessageDialog(null, "Insira dados");
-                                continue loopExterno;
-                            }
-
-                            Cliente clienteAluguel = encontraCliente(cpfAluguel.getText(), clientes);
-                            Jogo jogoAlugar = estoque.getJogo(Integer.parseInt(codigoJogoAlugar.getText()));
-                            if(clienteAluguel != null || jogoAlugar != null){
-                                boolean resultadoAluguel = vendedorLogado.processarAluguel(clienteAluguel, Integer.parseInt(codigoJogoAlugar.getText()), estoque);
-                                if(resultadoAluguel){
-                                    JOptionPane.showMessageDialog(null, "Aluguel realizado com sucesso!");
-                                    continue loopExterno;
-                                } else {
-                                    JOptionPane.showMessageDialog(null, "Falha ao processar aluguel!");
+                            if(resultado == JOptionPane.OK_OPTION) {
+                                if (cpfAluguel.getText().isBlank() || codigoJogoAlugar.getText().isBlank()) {
+                                    JOptionPane.showMessageDialog(null, "Insira dados");
                                     continue loopExterno;
                                 }
+
+                                Cliente clienteAluguel = encontraCliente(cpfAluguel.getText(), clientes);
+                                if (clienteAluguel != null) {
+                                    boolean resultadoAluguel = vendedorLogado.processarAluguel(clienteAluguel, Integer.parseInt(codigoJogoAlugar.getText()), estoque);
+                                    if (resultadoAluguel) {
+                                        JOptionPane.showMessageDialog(null, "Aluguel realizado com sucesso!");
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "Falha ao processar aluguel!");
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
+                                }
                             }
+                            continue loopExterno;
+
 
                         case 2:
                             JTextField nome = new JTextField();

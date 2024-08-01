@@ -9,17 +9,17 @@ public class Vendedor extends Funcionario {
     }
 
     // Métodos
-    public boolean vender(Cliente cliente, int codigo, int quantidade, Estoque estoque){
-        if(estoque.verificarDisponibilidade(codigo, quantidade)){
-            estoque.atualizarEstoque(codigo, quantidade);
-            double valorVenda = quantidade * obterValorJogo(codigo, estoque);
+    public boolean vender(Cliente cliente, int codigoJogo, int quantidade, Estoque estoque){
+        if(estoque.verificarDisponibilidade(codigoJogo, quantidade)){
+            estoque.atualizarEstoque(codigoJogo, quantidade);
+            double valorVenda = quantidade * obterValorJogo(codigoJogo, estoque);
             this.comissao += 0.05 * valorVenda;
             modificarSalario();
             this.comissao = 0;
 
 
             for (Jogo jogo : estoque.getJogos()) {
-                if (jogo.getCodigo() == codigo) {
+                if (jogo.getCodigo() == codigoJogo) {
                     cliente.adicionarCompra(jogo, quantidade);
                     break;
                 }
@@ -35,7 +35,7 @@ public class Vendedor extends Funcionario {
             Jogo jogo = estoque.getJogo(codigoJogo);
             Aluguel aluguel = new Aluguel(jogo);
 
-            cliente.getAlugueis().add(aluguel);
+            cliente.adicionarAluguel(aluguel);
             estoque.atualizarEstoque(codigoJogo, 1);
             cliente.setNumAluguel(cliente.getNumAluguel() + 1);
 
