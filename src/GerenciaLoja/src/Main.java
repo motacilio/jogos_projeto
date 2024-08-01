@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class Main {
 
@@ -89,8 +90,11 @@ public class Main {
         Gerente gerente = instanciaGerente();
         gerente.setMatricula(1);
 
-        ArrayList<Vendedor> vendedores = instanciaFuncs();
+        //ArrayList<Vendedor> vendedores = instanciaFuncs();
+        // lista temporaria enquanto nao arruma a porra dos arquivos
+        ArrayList<Vendedor> vendedores = new ArrayList<>();
 
+        vendedores.add(new Vendedor("Julio", "123", 2000));
         System.out.println("Gerente\n"+gerente.getNome() +"-"+ gerente.matricula + "\n");
 
         System.out.println("Vendedores\n");
@@ -118,7 +122,7 @@ public class Main {
                 String senha = new String(passwordField.getPassword());
 
                 if (matricula == gerenteMatricula && senha.equals(gerenteSenha)) {
-                    //Logando no modo de usuário Funcionário
+                    //Logando no modo de usuário Gerente
                     JOptionPane.showMessageDialog(null, "Bem-vindo Gerente!");
                     visaogerente(gerente, estoque);
                     break;
@@ -152,12 +156,10 @@ public class Main {
 
     private static void visaoVendedor(Vendedor vendedorLogado, Estoque estoque, List<Cliente> clientes) {
 
-        JOptionPane.showMessageDialog(null, "Tela do Funcionário Comum");
-
         loopExterno:
         do{
             String opcoes[] = new String[]{
-                "Vender", "Alugar", "Cadastrar Cliente"
+                    "Vender", "Alugar", "Cadastrar Cliente", "Renovar Aluguel", "Voltar"
             };
 
 
@@ -165,19 +167,19 @@ public class Main {
             painel.setLayout(new BorderLayout(5, 5));
             painel.setPreferredSize(new Dimension(80, 80));
 
-            JLabel titulo = new JLabel("Comércio", JLabel.CENTER);
+            JLabel titulo = new JLabel("Vendas", JLabel.CENTER);
             titulo.setFont(new Font("Arial", Font.BOLD, 18));
             painel.add(titulo, BorderLayout.NORTH);
 
             int opcaoSelecionada = JOptionPane.showOptionDialog(
-                null, 
-                painel, 
-                "Comércio", 
-                JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.QUESTION_MESSAGE, 
-                null,
-                opcoes, 
-                opcoes[0]
+                    null,
+                    painel,
+                    "Comércio",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opcoes,
+                    opcoes[0]
             );
 
             while (true) {
@@ -187,26 +189,101 @@ public class Main {
                             JTextField cpf = new JTextField();
 
                             Object[] campos = {
-                                "CPF do Cliente:", cpf
+                                    "CPF do Cliente:", cpf
                             };
 
-                            JOptionPane.showConfirmDialog(null, 
-                            campos, 
-                            "Procurar Cliente", 
-                            JOptionPane.OK_CANCEL_OPTION);
+                            JOptionPane.showConfirmDialog(null,
+                                    campos,
+                                    "Procurar Cliente",
+                                    JOptionPane.OK_CANCEL_OPTION);
 
                             Cliente clienteAtual = encontraCliente(cpf.getText(), clientes);
                             if(clienteAtual != null){
+                                JTextField codigo = new JTextField();
+                                JTextField quantidade = new JTextField();
 
+                                Object[] dadosVenda = {
+                                        "Código do jogo:", codigo, "Quantidade:", quantidade
+                                };
+
+                                JOptionPane.showConfirmDialog(
+                                        null,
+                                        dadosVenda,
+                                        "Dados da Venda",
+                                        JOptionPane.OK_CANCEL_OPTION
+                                );
+
+                                boolean venda = vendedorLogado.vender(clienteAtual, Integer.parseInt(codigo.getText()), Integer.parseInt(quantidade.getText()), estoque);
+                                if(venda){
+                                    JOptionPane.showMessageDialog(null, "Venda Realizada!");
+                                    continue loopExterno;
+                                } else{
+                                    JOptionPane.showMessageDialog(null, "Jogo não encontrado");
+                                    continue loopExterno;
+                                }
                             } else {
-                                JOptionPane.showMessageDialog(null, 
-                                "Cliente não encontrado");
+                                JOptionPane.showMessageDialog(null,
+                                        "Cliente não encontrado");
                                 continue loopExterno;
                             }
 
+                        case 1:
+                            JTextField cpfAluguel = new JTextField();
+                            JTextField codigoJogoAlugar = new JTextField();
 
-                            break;
-                    
+                            Object[] camposAluguel = {
+                                    "CPF:", cpfAluguel, "Código do Jogo:", codigoJogoAlugar
+                            };
+
+                            JOptionPane.showConfirmDialog(
+                                    null,
+                                    camposAluguel,
+                                    "Dados Aluguel",
+                                    JOptionPane.OK_CANCEL_OPTION
+                            );
+
+                            if(cpfAluguel.getText().isBlank() || codigoJogoAlugar.getText().isBlank()){
+                                JOptionPane.showMessageDialog(null, "Insira dados");
+                                continue loopExterno;
+                            }
+
+                            Cliente clienteAluguel = encontraCliente(cpfAluguel.getText(), clientes);
+                            Jogo jogoAlugar = estoque.getJogo(Integer.parseInt(codigoJogoAlugar.getText()));
+                            if(clienteAluguel != null || jogoAlugar != null){
+                                boolean resultadoAluguel = vendedorLogado.processarAluguel(clienteAluguel, Integer.parseInt(codigoJogoAlugar.getText()), estoque);
+                                if(resultadoAluguel){
+                                    JOptionPane.showMessageDialog(null, "Aluguel realizado com sucesso!");
+                                    continue loopExterno;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Falha ao processar aluguel!");
+                                    continue loopExterno;
+                                }
+                            }
+
+                        case 2:
+                            JTextField nome = new JTextField();
+                            JTextField cpfNovo = new JTextField();
+
+                            Object[] camposCadastroCliente = {
+                                    "Nome:", nome, "CPF: ", cpfNovo
+                            };
+
+                            JOptionPane.showConfirmDialog(
+                                    null,
+                                    camposCadastroCliente,
+                                    "Cadastro de Cliente",
+                                    JOptionPane.OK_CANCEL_OPTION
+                            );
+                            if(nome.getText().isBlank() || cpfNovo.getText().isBlank()){
+                                JOptionPane.showMessageDialog(null, "Digite dados válidos");
+                                continue loopExterno;
+                            }
+                            clientes.add(new Cliente(nome.getText(), cpfNovo.getText()));
+                            JOptionPane.showMessageDialog(null, "Cliente Cadastrado!");
+                            continue loopExterno;
+
+                        case 4:
+                            return;
                         default:
                             break;
                     }

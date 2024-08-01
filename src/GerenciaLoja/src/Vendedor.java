@@ -30,13 +30,13 @@ public class Vendedor extends Funcionario implements Serializable {
         return false;
     }
 
-    public boolean processarAluguel(Cliente cliente, int codigo, Estoque estoque){
-        if(estoque.verificarDisponibilidade(codigo, 1)){
-            Jogo jogo = estoque.getJogo(codigo);
+    public boolean processarAluguel(Cliente cliente, int codigoJogo, Estoque estoque){
+        if(estoque.verificarDisponibilidade(codigoJogo, 1)){
+            Jogo jogo = estoque.getJogo(codigoJogo);
             Aluguel aluguel = new Aluguel(jogo);
 
             cliente.getAlugueis().add(aluguel);
-            estoque.atualizarEstoque(codigo, 1);
+            estoque.atualizarEstoque(codigoJogo, 1);
             cliente.setNumAluguel(cliente.getNumAluguel() + 1);
 
             return true;

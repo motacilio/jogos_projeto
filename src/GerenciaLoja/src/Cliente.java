@@ -51,14 +51,14 @@ public class Cliente extends Pessoa {
 
     }
 
-    public int renovarAluguel(int codigo) {
+    public int renovarAluguel(int codigoAluguel) {
         if (this.qtdeAtrasos() > 0) {
             return 1;
             // cliente possui alugueis atrasados
         }
 
         for (Aluguel aluguel : alugueis) {
-            if (aluguel.getCodigo() == codigo) {
+            if (aluguel.getCodigo() == codigoAluguel) {
                 aluguel.renovar();
                 //Sucesso
                 return 0;
