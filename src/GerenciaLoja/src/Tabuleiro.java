@@ -8,13 +8,14 @@ public class Tabuleiro extends Jogo{
 
     public String mostraInfo(){
         String s = String.format("""
+                Código:%d
                 Nome:%s
                 Tipo: Tabuleiro
                 Quantidade de Jogadores: %d
                 Gênero: %s
                 Empresa: %s
                 Quantidade: %d
-                Valor:%.2f""", getNome(), getQtdeJogadores(), getGenero(), getEmpresa(), getQuantidade(), getValor());
+                Valor:%.2f""", getCodigo(),getNome(), getQtdeJogadores(), getGenero(), getEmpresa(), getQuantidade(), getValor());
 
         return(s);
     }

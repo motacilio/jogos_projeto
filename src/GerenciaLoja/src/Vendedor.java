@@ -1,7 +1,7 @@
-import java.io.Serializable;
 
 
-public class Vendedor extends Funcionario implements Serializable {
+
+public class Vendedor extends Funcionario {
     protected double comissao;
 
     Vendedor (String nome, String cpf, double salario) {

@@ -1,7 +1,6 @@
 import javax.swing.*;
-import java.io.Serializable;
 
-public class Gerente extends Funcionario implements Serializable {
+public class Gerente extends Funcionario {
 
     protected double comissao;
 
@@ -21,7 +20,7 @@ public class Gerente extends Funcionario implements Serializable {
     }
 
 // Colocar a Entrada de dados dos jogos na Main ?
-    void cadstrarJogo(Estoque estoque, int opcao){
+    public boolean cadstrarJogo(Estoque estoque, int opcao){
         if(opcao == 1){
             JTextField nome = new JTextField();
             JTextField quantidade = new JTextField();
@@ -42,10 +41,15 @@ public class Gerente extends Funcionario implements Serializable {
             "Adicionar Jogo", 
             JOptionPane.OK_CANCEL_OPTION);
 
+            if(op == JOptionPane.CANCEL_OPTION){
+                return false;
+            }
+
             Tabuleiro jogoTabNovo = new Tabuleiro(nome.getText(), 
                                         Integer.parseInt(quantidade.getText()), Integer.parseInt(valor.getText()), 
                                         genero.getText(), empresa.getText(), Integer.parseInt(qnt_jogadores.getText()));
             estoque.adicionarJogoTab(jogoTabNovo);
+            return true;
         } else if(opcao == 2){
             JTextField nome = new JTextField();
             JTextField quantidade = new JTextField();
@@ -68,15 +72,21 @@ public class Gerente extends Funcionario implements Serializable {
             "Adicionar Jogo", 
             JOptionPane.OK_CANCEL_OPTION);
 
+            if(op == JOptionPane.CANCEL_OPTION){
+                return false;
+            }
+
             Digital jogoDigNovo = new Digital(nome.getText(), Integer.parseInt(quantidade.getText()), 
                                               Double.parseDouble(valor.getText()), genero.getText(),
                                               empresa.getText(), plataforma.getText(), 
                                               conectividade.getText());
             estoque.adicionarJogoDig(jogoDigNovo);
+            return true;
         } 
+        return true;
     }
 
-    public void excluirJogo(Estoque estoque, int opcao){
+    public void excluirJogo(Estoque estoque, int codigo){
             estoque.removerJogo(codigo);
     }
 }

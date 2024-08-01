@@ -1,6 +1,6 @@
 public abstract class Jogo {
-    protected static int codigoAtual = 1;
-    protected int codigo;
+    protected static int codigoAtual = 0;
+    protected final int codigo;
     protected int quantidade;
     protected String nome;
     protected String genero;
@@ -8,7 +8,7 @@ public abstract class Jogo {
     protected double valor;
 
     Jogo(String nome, int quantidade, double valor, String genero, String empresa){
-        this.codigo = codigoAtual++;
+        this.codigo = ++codigoAtual;
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
@@ -23,7 +23,7 @@ public abstract class Jogo {
     }
 
     public int getCodigo() {
-        return codigo;
+        return this.codigo;
     }
 
     public int getQuantidade() {
@@ -48,10 +48,6 @@ public abstract class Jogo {
 
     public static void setCodigoAtual(int codigoAtual) {
         Jogo.codigoAtual = codigoAtual;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
     }
 
     public void setNome(String nome) {

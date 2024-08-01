@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class Estoque {
    private static Estoque instance;
 
@@ -21,30 +23,31 @@ public class Estoque {
 
     public void adicionarJogoTab(Jogo jogo){
         jogos.add(jogo);
+        System.out.println("Código do jogo:"+jogo.getCodigo()+", static:"+Jogo.getCodigoAtual());
         qtdeTab += jogo.getQuantidade();
     }
 
     public void adicionarJogoDig(Jogo jogo){
         jogos.add(jogo);
+        System.out.println("Código do jogo:"+jogo.getCodigo()+", static:" + Jogo.getCodigoAtual());
         qtdeDig += jogo.getQuantidade();
     }
 
 
     public void removerJogo(int codigo){
-        Jogo jogoAux = null;
+        Jogo jogoAux = getJogo(codigo);
 
-        for(Jogo jogo : jogos){
-            if(jogo.codigo == codigo){
-                jogoAux = jogo;
-            }
-        }
-
-        jogos.remove(jogoAux);
+        if(jogoAux == null){
+            JOptionPane.showMessageDialog(null,"Esse jogo não existe");
+            return;
+        }else{
+            jogos.remove(jogoAux);
 
         if(jogoAux instanceof Tabuleiro)
-            qtdeTab--;
+            qtdeTab -= jogoAux.getQuantidade();
         else
-            qtdeDig--;
+            qtdeDig -= jogoAux.getQuantidade();
+        }
     }
 
 
@@ -78,15 +81,14 @@ public class Estoque {
 
     public String mostrarJogos(){
         StringBuilder s = new StringBuilder();
-
+        s.append("Jogos Digitais:" + this.qtdeDig + "\n\n");
         for(Jogo jogo : jogos){
-            s.append("Jogos Digitais\n\n");
             if(jogo instanceof Digital)
-                s.append(jogo.mostraInfo()).append("\n");
+                s.append(jogo.mostraInfo()).append("\n\n");
         }
 
+        s.append("\n\nJogos Digitais:" + this.qtdeTab + "\n\n");
         for(Jogo jogo : jogos){
-            s.append("\n\nJogos de Tabuleiro\n\n");
             if(jogo instanceof Tabuleiro)
                 s.append(jogo.mostraInfo()).append("\n");
         }
@@ -96,5 +98,12 @@ public class Estoque {
 
     public ArrayList<Jogo> getJogos() {
         return jogos;
+    }
+
+    public int getQTab(){
+        return qtdeTab;
+    }
+    public int getQDig(){
+        return qtdeDig;
     }
 }

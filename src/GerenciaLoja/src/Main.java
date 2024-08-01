@@ -1,10 +1,8 @@
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class Main {
 
@@ -64,8 +62,10 @@ public class Main {
                     vend = (Vendedor) ox.readObject();
                     v.add(vend);
                 } catch (EOFException | ClassNotFoundException e) {
+                    ox.close();
                     return null;
                 }
+                ox.close();
 
                 return v;
             }
@@ -115,6 +115,7 @@ public class Main {
                 "Senha:", passwordField
         };
 
+        login:
         while(true) {
             int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
@@ -125,7 +126,7 @@ public class Main {
                     //Logando no modo de usuário Gerente
                     JOptionPane.showMessageDialog(null, "Bem-vindo Gerente!");
                     visaogerente(gerente, estoque);
-                    break;
+                    continue login;
                 } else  if(senha.equals(senhaComum)){
                     Vendedor vendedorLogado = null;
 
@@ -141,12 +142,12 @@ public class Main {
                     }else {
                         // Credenciais inválidas
                         JOptionPane.showMessageDialog(null, "Login ou senha inválidos.");
-                        continue;
+                        continue login;
                     }
                 }
 
             }else{
-                break;
+               break;
             }
         }
 
@@ -303,7 +304,7 @@ public class Main {
         loopExterno:
         do{
             String opcoes[] = new String[]{
-                "Cadastrar Jogo", "Excluir Jogo", "Cadastrar Funcionário", "Mostra Estoque", "Voltar"
+                "Cadastrar Jogo", "Excluir Jogo", "Cadastrar Funcionário", "Ver Estoque", "Voltar"
             };
 
             JPanel painel = new JPanel();
@@ -324,7 +325,7 @@ public class Main {
                     opcoes,
                     opcoes[0]
             );
-
+            loopJogos:
             while(true){
                 if (opcaoSelecionada != JOptionPane.CLOSED_OPTION) {
                     switch (opcaoSelecionada) {
@@ -346,11 +347,19 @@ public class Main {
 
                             switch (opcaoSelecionada) {
                                 case 0:
-                                    gerente.cadstrarJogo(estoque, 2);
-                                    continue loopExterno;
+                                    boolean op = gerente.cadstrarJogo(estoque, 2);
+                                    if(op){
+                                        continue loopExterno;
+                                    }else{
+                                        continue loopJogos;
+                                    }
                                 case 1:
-                                    gerente.cadstrarJogo(estoque, 1);
-                                    continue loopExterno;
+                                    op = gerente.cadstrarJogo(estoque, 1);
+                                    if(op){
+                                        continue loopExterno;
+                                    }else{
+                                        continue loopJogos;
+                                    }
                                 case 2:
                                     continue loopExterno;
                                 default:
@@ -367,9 +376,12 @@ public class Main {
 
                             String cod = JOptionPane.showInputDialog(null, 
                                                         estoque.mostrarJogos() + 
-                                                        "\n Digite o codigo do Jogo?"); 
+                                                        "\n Digite o código do Jogo"); 
+                        
+                            int codigo = Integer.parseInt(cod);
+                            System.out.println("Código jogo excluido:"+codigo);
 
-                            gerente.excluirJogo(estoque, Integer.parseInt(cod));
+                            gerente.excluirJogo(estoque, codigo);
                             
                             continue loopExterno;
 
@@ -382,11 +394,15 @@ public class Main {
                                 "Nome:", nome, "CPF:", cpf, "Salário", salario
                             };
 
-                            JOptionPane.showConfirmDialog(
+                            int op = JOptionPane.showConfirmDialog(
                                             null, 
                                             campos, 
                                             "Adicionar Vendedor", 
                                             JOptionPane.OK_CANCEL_OPTION);
+
+                                            if(op == JOptionPane.OK_CANCEL_OPTION){
+                                                continue loopExterno;
+                                            }
 
                             Vendedor vendedor = new Vendedor(nome.getText(), cpf.getText(), Double.parseDouble(salario.getText()));
                             gravaVendedor(vendedor);
@@ -402,6 +418,8 @@ public class Main {
                                 continue loopExterno;
                             }
 
+                        case 4:
+                            return;
                         default:
                             break;
                     }

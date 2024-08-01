@@ -11,6 +11,7 @@ public class Digital extends Jogo{
 
     public String mostraInfo(){
         String s = String.format("""
+                Código:%d
                 Nome:%s
                 Tipo: Digital
                 Plataforma: %s
@@ -18,7 +19,7 @@ public class Digital extends Jogo{
                 Gênero: %s
                 Empresa: %s
                 Quantidade: %d
-                Valor:%.2f""", getNome(), getPlataforma(), getConectividade(), getGenero(), getEmpresa(), getQuantidade(), getValor());
+                Valor:%.2f""",getCodigo(), getNome(), getPlataforma(), getConectividade(), getGenero(), getEmpresa(), getQuantidade(), getValor());
 
         return(s);
     }
