@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import javax.swing.*;
 
 public class Gerente extends Funcionario {
@@ -20,7 +22,14 @@ public class Gerente extends Funcionario {
     }
 
 // Colocar a Entrada de dados dos jogos na Main ?
-    public boolean cadstrarJogo(Estoque estoque, int opcao){
+    public boolean cadastrarJogo(Estoque estoque, int opcao) throws IOException{
+        if(estoque.getJogos() == null){
+            Jogo.setCodigoAtual(0);
+        }
+
+        int novoCodigo = estoque.jogos.size();
+        Jogo.setCodigoAtual(novoCodigo);
+
         if(opcao == 1){
             JTextField nome = new JTextField();
             JTextField quantidade = new JTextField();
@@ -44,7 +53,7 @@ public class Gerente extends Funcionario {
             if(op == JOptionPane.CANCEL_OPTION){
                 return false;
             }
-
+        
             Tabuleiro jogoTabNovo = new Tabuleiro(nome.getText(), 
                                         Integer.parseInt(quantidade.getText()), Integer.parseInt(valor.getText()), 
                                         genero.getText(), empresa.getText(), Integer.parseInt(qnt_jogadores.getText()));
@@ -84,6 +93,37 @@ public class Gerente extends Funcionario {
             return true;
         } 
         return true;
+    }
+
+    public boolean atualizarJogo(Estoque estoque, int codigo){
+        Jogo jogo = estoque.getJogo(codigo);
+
+        loop:
+        while (true) {
+            String[] message = {"Adicionar quantidade", "Alterar nome", "Alterar valor", "Voltar"};
+
+            int op = JOptionPane.showOptionDialog(
+            null, jogo.mostraInfo(),null, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, message, null);
+
+            switch (op) {
+                case 0:
+                    String quant = JOptionPane.showInputDialog("Digite a quantidade a ser adicionada");
+                    jogo.somarQuant(Integer.parseInt(quant));
+                    continue loop;
+                case 1:
+                    String nome = JOptionPane.showInputDialog("Digite o novo nome");
+                    jogo.setNome(nome);
+                    continue loop;
+                case 2:
+                    String valor = JOptionPane.showInputDialog("Digite o novo valor");
+                    jogo.setValor(Double.parseDouble(valor));
+                    continue loop;
+                case 3:
+                    return true;
+                default:
+                    break;
+            }
+        }
     }
 
     public void excluirJogo(Estoque estoque, int codigo){

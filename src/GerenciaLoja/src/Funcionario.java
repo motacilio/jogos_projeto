@@ -1,3 +1,5 @@
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 @SuppressWarnings("unused")
@@ -14,6 +16,7 @@ public class Funcionario extends Pessoa implements Serializable {
     }
 
     Funcionario(){}
+
 
     public void mostrarInfo(){
         System.out.println("Nome: " + this.getNome() + "\nCPF: " + this.getCpf()+
@@ -34,5 +37,9 @@ public class Funcionario extends Pessoa implements Serializable {
 
     public void setMatricula(int matricula) {
         this.matricula = matricula;
+    }
+
+    public static void setMatriculaAtual(int matricula){
+        matriculaAtual = matricula;
     }
 }

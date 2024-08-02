@@ -1,3 +1,5 @@
+
+
 public class Digital extends Jogo{
     protected String plataforma;
     protected String conectividade;

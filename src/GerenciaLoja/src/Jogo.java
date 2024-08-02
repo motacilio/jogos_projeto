@@ -1,4 +1,6 @@
-public abstract class Jogo {
+import java.io.Serializable;
+
+public abstract class Jogo implements Serializable {
     protected static int codigoAtual = 0;
     protected final int codigo;
     protected int quantidade;
@@ -68,5 +70,9 @@ public abstract class Jogo {
 
     public void setQuantidade(int quantidade) {
         this.quantidade -= quantidade;
+    }
+
+    public void somarQuant(int quantidade){
+        this.quantidade += quantidade;
     }
 }
