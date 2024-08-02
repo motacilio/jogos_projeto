@@ -23,7 +23,7 @@ public class Cliente extends Pessoa {
         numCompras += quantidade;
     }
 
-    private int qtdeAtrasos(){
+    public int qtdeAtrasos(){
         int num = 0;
         for(Aluguel aluguel : alugueis){
             if(aluguel.atraso()){
@@ -33,9 +33,9 @@ public class Cliente extends Pessoa {
         return num;
     }
 
-    public boolean solicitarAluguel(int codigo, Vendedor vendedor, Estoque estoque){
-        return vendedor.processarAluguel(this, codigo, estoque);
-    }
+    // public boolean solicitarAluguel(int codigo, Vendedor vendedor, Estoque estoque){
+    //     return vendedor.processarAluguel(this, codigo, estoque);
+    // }
 
     public double devolver(Estoque estoque, int codigo) {
         double multa = 0;
@@ -47,9 +47,27 @@ public class Cliente extends Pessoa {
             }
             return multa;
         }else{
+            for(Aluguel aluguel: alugueis){
+                if(aluguel.getCodigo() == codigo){
+                    alugueis.remove(aluguel);
+                    aluguel.getJogo().somarQuant(1);
+                }
+            }
             return 0;
         }
 
+    }
+
+    public double valorMulta(){
+        double multa = 0;
+        if(qtdeAtrasos() > 0){
+            for(Aluguel aluguel : alugueis){
+                if(aluguel.atraso()){
+                    multa = aluguel.verificarMulta();
+                }
+            }
+        }
+        return multa;
     }
 
     public int renovarAluguel(int codigoAluguel) {

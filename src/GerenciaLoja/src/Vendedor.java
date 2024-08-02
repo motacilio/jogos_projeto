@@ -1,6 +1,4 @@
 
-
-
 public class Vendedor extends Funcionario {
     protected double comissao;
 
@@ -30,18 +28,19 @@ public class Vendedor extends Funcionario {
         return false;
     }
 
-    public boolean processarAluguel(Cliente cliente, int codigoJogo, Estoque estoque){
+    public Aluguel processarAluguel(Cliente cliente, int codigoJogo, Estoque estoque){
         if(estoque.verificarDisponibilidade(codigoJogo, 1)){
             Jogo jogo = estoque.getJogo(codigoJogo);
             Aluguel aluguel = new Aluguel(jogo);
-
+            aluguel.setCliente(cliente);
             cliente.adicionarAluguel(aluguel);
             estoque.atualizarEstoque(codigoJogo, 1);
             cliente.setNumAluguel(cliente.getNumAluguel() + 1);
 
-            return true;
+            return aluguel;
+        }else{
+            return null;
         }
-        return false;
     }
 
     private double obterValorJogo(int codigo, Estoque estoque){

@@ -1,15 +1,13 @@
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public  class Pessoa implements Serializable {
-    protected static int countCodigo = 0;
+    protected static int codigoAtual = 0;
     protected int codigo;
     protected String nome;
     protected String cpf;
-    ArrayList<Endereco> enderecos = new ArrayList<Endereco>();
 
     Pessoa(String nome, String cpf) {
-        this.codigo = ++countCodigo;
+        this.codigo = ++codigoAtual;
         this.nome = nome;
         this.cpf = cpf;
     }
@@ -25,9 +23,17 @@ public  class Pessoa implements Serializable {
         return cpf;
     }
 
+    public int getCodigo(){
+        return codigo;
+    }
+
 
 
     // Métodos Sets
+
+    public static void setCodigoAtual(int c){
+        codigoAtual = c;
+    }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
@@ -35,17 +41,6 @@ public  class Pessoa implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    // Métodos Extra
-    public void addEndereco(String estado, String cidade, String logradouro, String setor, String cep) {
-        enderecos.add(new Endereco(estado, cidade, logradouro, setor, cep));
-    }
-
-    public void mostraEndereco() {
-        for(Endereco endereco: enderecos){
-            System.out.println(endereco);
-        }
     }
 
 }

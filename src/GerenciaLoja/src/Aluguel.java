@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Aluguel {
+public class Aluguel implements Serializable{
     protected static int countCodigo = 0;
     protected int codigo;
-
+    protected Cliente cliente;
     protected Jogo jogo;
     protected final int tempoDevDias = 3;
     protected LocalDate dataAluguel;
@@ -35,13 +36,27 @@ public class Aluguel {
         }
     }
 
+    public String mostraAluguel(){
+        StringBuilder s = new StringBuilder();
+        s.append("Código: " + codigo + "\nCliente: " + cliente.getNome() + " - " + cliente.getCpf() + "\n"+
+        "Jogo: " + jogo.getNome() + "\nData de aluguel: " + dataAluguel + "\nAtraso: " + atraso() + "\nMulta:" + verificarMulta());
+        return s.toString();
+    }
+
     public void renovar(){
         this.dataAluguel = LocalDate.now();
+    }
+
+    public Jogo getJogo(){
+        return jogo;
     }
 
     public int getCodigo() {
         return codigo;
     }
 
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
+    }
 
 }

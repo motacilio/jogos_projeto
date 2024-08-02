@@ -36,6 +36,21 @@ public class Main {
         fx.close();
     }
 
+    public static void gravaCliente(Cliente cliente) throws IOException {
+        try{
+            boolean append = new File("cliente.txt").exists();
+            FileOutputStream fx = new FileOutputStream("cliente.txt", true);
+            ObjectOutputStream ox = append ? new AppendingObjectOutputStream(fx) : new ObjectOutputStream(fx);
+
+            ox.writeObject(cliente);
+            ox.flush();
+            ox.close();
+            fx.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }   
+    }
+
     public static void gravaVendedor(Vendedor vendedor) throws IOException {
         try{
             boolean append = new File("vend.txt").exists();
@@ -70,6 +85,39 @@ public class Main {
         return vends;
     }
 
+    private static ArrayList<Cliente> instanciaClientes() {
+        ArrayList<Cliente> clientes = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("cliente.txt"))) {
+            while (true) {
+                try {
+                    Cliente cliente = (Cliente) ois.readObject();
+                    clientes.add(cliente);
+                } catch (EOFException e) {
+                    break;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo vend.txt não encontrado.");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return clientes;
+    }
+
+    private static ArrayList<Aluguel> instanciaAluguel(ArrayList<Cliente> clientes){
+        ArrayList<Aluguel> alugueis = new ArrayList<>();
+        
+        for(Cliente c:clientes){
+            if(c.getAlugueis() != null){
+                for(Aluguel a : c.getAlugueis()){
+                    alugueis.add(a);
+                }
+            }
+        }
+
+        return alugueis;
+    }
+
     public static Cliente encontraCliente(String cpf, List<Cliente> clientes){
         for(Cliente cliente: clientes){
             if(cliente.getCpf().equals(cpf)){
@@ -92,30 +140,50 @@ public class Main {
         arqVend.close();
     }
 
+    public static void atualizaArquivosCliente(ArrayList<Cliente> clientes) throws IOException{
+        FileOutputStream arqCli = new FileOutputStream("cliente.txt");
+        ObjectOutputStream cli = new ObjectOutputStream(arqCli);
+
+        for(Cliente c : clientes){
+            cli.writeObject(c);
+        }
+
+        cli.flush();
+        cli.close();
+        arqCli.close();
+    }
+
     public static void main(String[] args) throws IOException {
 
         Estoque estoque = Estoque.getInstance();
         estoque.lerArquivos();
-        List<Cliente> clientes = new ArrayList<>();
 
         Gerente gerente = instanciaGerente();
         gerente.setMatricula(1000);
 
+        ArrayList<Cliente> clientes = instanciaClientes();
+
+        ArrayList<Aluguel> alugueis = instanciaAluguel(clientes);
+
         ArrayList<Vendedor> vendedores = instanciaFuncs();
-        // // lista temporaria enquanto nao arruma a porra dos arquivos
-        // ArrayList<Vendedor> vendedores = new ArrayList<>();
 
         System.out.println("Gerente\n"+gerente.getNome() +"-"+ gerente.matricula + "\n");
 
-        System.out.println("Vendedores\n");
+        System.out.println("Vendedores");
         for (Vendedor vendedor : vendedores) {
             System.out.println(vendedor.getNome() +"-"+ vendedor.matricula);
         }
         System.out.println();
 
-        String senhaComum = "senha";
-        int gerenteMatricula = 1;
-        String gerenteSenha = "admin";
+        System.out.println("Clientes");
+
+        for (Cliente cliente : clientes){
+            System.out.println(cliente.getNome() + "-" + cliente.codigo);
+        }
+
+        String senhaComum = "funcmihl";
+        int gerenteMatricula = 1000;
+        String gerenteSenha = "adminmihl";
 
         // Mostrar tela de login
         JTextField usernameField = new JTextField();
@@ -148,7 +216,7 @@ public class Main {
                     }
                     if(vendedorLogado != null){
                         JOptionPane.showMessageDialog(null, "Bem-Vindo " + vendedorLogado.getNome() + "!");
-                        visaoVendedor(vendedorLogado, estoque, clientes);
+                        visaoVendedor(vendedorLogado, estoque, alugueis, clientes);
                     }else {
                         // Credenciais inválidas
                         JOptionPane.showMessageDialog(null, "Login ou senha inválidos.");
@@ -163,14 +231,28 @@ public class Main {
         JOptionPane.showMessageDialog(null, "Finalizando Programa");
     }
 
-    private static void visaoVendedor(Vendedor vendedorLogado, Estoque estoque, List<Cliente> clientes) {
+    private static void visaoVendedor(Vendedor vendedorLogado, Estoque estoque, ArrayList<Aluguel> alugueis, ArrayList<Cliente> clientes) throws IOException {
 
         loopExterno:
         do{
             String[] opcoes = new String[]{
-                    "Vender", "Alugar", "Cadastrar Cliente", "Renovar Aluguel", "Voltar"
+                    "Vender", "Alugar", "Cadastrar Cliente", "Renovar Aluguel", "Mostrar Aluguéis", "Devolver", "Voltar"
             };
 
+            JTextArea textoEstoque = new JTextArea(10, 30);
+            textoEstoque.setText("Lista de Jogos:\n" + estoque.mostrarJogos());
+            textoEstoque.setEditable(false);
+            JScrollPane scrollEstoque = new JScrollPane(textoEstoque);
+
+            String s = "";
+            for(Aluguel a : alugueis){
+                s += a.mostraAluguel() + "\n";
+            }
+
+            JTextArea textoAluguel = new JTextArea(10, 30);
+            textoAluguel.setText("Lista de aluguéis:\n" + s);
+            textoAluguel.setEditable(false);
+            JScrollPane scrollAluguel = new JScrollPane(textoAluguel);
 
             JPanel painel = new JPanel();
             painel.setLayout(new BorderLayout(5, 5));
@@ -212,9 +294,9 @@ public class Main {
                                 if(clienteAtual != null){
                                     JTextField codigo = new JTextField();
                                     JTextField quantidade = new JTextField();
-
+                                    
                                     Object[] dadosVenda = {
-                                            "Código do jogo:", codigo, "Quantidade:", quantidade
+                                            scrollEstoque, "Código do jogo:", codigo, "Quantidade:", quantidade
                                     };
 
                                     int resultadoDadosVenda = JOptionPane.showConfirmDialog(
@@ -253,7 +335,7 @@ public class Main {
                             JTextField codigoJogoAlugar = new JTextField();
 
                             Object[] camposAluguel = {
-                                    "CPF:", cpfAluguel, "Código do Jogo:", codigoJogoAlugar
+                                    scrollEstoque, "CPF:", cpfAluguel, "Código do Jogo:", codigoJogoAlugar
                             };
 
                             int resultado = JOptionPane.showConfirmDialog(
@@ -271,19 +353,25 @@ public class Main {
 
                                 Cliente clienteAluguel = encontraCliente(cpfAluguel.getText(), clientes);
                                 if (clienteAluguel != null) {
-                                    boolean resultadoAluguel = vendedorLogado.processarAluguel(clienteAluguel, Integer.parseInt(codigoJogoAlugar.getText()), estoque);
-                                    if (resultadoAluguel) {
+
+                                    if(clienteAluguel.qtdeAtrasos() > 0){
+                                        JOptionPane.showMessageDialog(null, "Esse cliente tem atrasos: \n"+clienteAluguel.qtdeAtrasos()+" atrasos. Multa de: " + clienteAluguel.valorMulta());
+                                        continue loopExterno;
+                                    }
+
+                                    Aluguel resultadoAluguel = vendedorLogado.processarAluguel(clienteAluguel, Integer.parseInt(codigoJogoAlugar.getText()), estoque);
+                                    alugueis.add(resultadoAluguel);
+                                    if (resultadoAluguel != null) {
                                         JOptionPane.showMessageDialog(null, "Aluguel realizado com sucesso!");
                                     } else {
                                         JOptionPane.showMessageDialog(null, "Falha ao processar aluguel!");
+                                        continue loopExterno;
                                     }
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
                                 }
                             }
                             continue loopExterno;
-
-
                         case 2:
                             JTextField nome = new JTextField();
                             JTextField cpfNovo = new JTextField();
@@ -302,11 +390,79 @@ public class Main {
                                 JOptionPane.showMessageDialog(null, "Digite dados válidos");
                                 continue loopExterno;
                             }
+
+                            Pessoa.setCodigoAtual(clientes.getLast().getCodigo());
                             clientes.add(new Cliente(nome.getText(), cpfNovo.getText()));
                             JOptionPane.showMessageDialog(null, "Cliente Cadastrado!");
                             continue loopExterno;
-
                         case 4:
+                            if(alugueis == null){
+                                JOptionPane.showMessageDialog(null,"Não tem aluguéis...");
+                            }else{
+                                JOptionPane.showMessageDialog(null, scrollAluguel);
+                            }
+                            continue loopExterno;
+                        case 5:
+                        cpfAluguel = new JTextField();
+                        JTextField codigo = new JTextField();
+                        
+                        camposAluguel = new Object[] {
+                                "CPF:", cpfAluguel
+                        };
+
+                        resultado = JOptionPane.showConfirmDialog(
+                                null,
+                                camposAluguel,
+                                "Devolver",
+                                JOptionPane.OK_CANCEL_OPTION
+                        );
+
+                        Cliente clienteAluguel = encontraCliente(cpfAluguel.getText(), clientes);
+
+                        s = "";
+                        for(Aluguel a : clienteAluguel.getAlugueis()){
+                            s+=a.mostraAluguel()+"\n";
+                        }
+
+                        textoAluguel = new JTextArea(10, 30);
+                        textoAluguel.setText("Lista de aluguéis:\n" + s);
+                        textoAluguel.setEditable(false);
+                        scrollAluguel = new JScrollPane(textoAluguel);
+
+                        campos = new Object[] {scrollAluguel, "Código do aluguel para devolver:", codigo};
+
+                        JOptionPane.showConfirmDialog(null, campos, "Devolução", JOptionPane.OK_CANCEL_OPTION);
+
+                        double devolução = clienteAluguel.devolver(estoque, Integer.parseInt(codigo.getText()));
+                        if(devolução == 0){
+                            JOptionPane.showMessageDialog(null, "Devolução realizada!");
+                            continue loopExterno;
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Esse cliente tem atrasos: \n"+clienteAluguel.qtdeAtrasos()+" atrasos. Multa de: " + clienteAluguel.valorMulta());
+                            Object[] ops = {"Devolver", "Renovar", "Cancelar"};
+                            
+                            int o = JOptionPane.showOptionDialog(null, null, "Devolução", JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE, null, ops, ops[0]);
+                            if(o == 0){
+                                JOptionPane.showMessageDialog(null,"Pagamento realizado! Como penalidade você deve devolver todos os jogos!");
+                                for(Aluguel a : clienteAluguel.getAlugueis()){
+                                    a.renovar();
+                                    clienteAluguel.devolver(estoque, a.getCodigo());
+                                }
+                                continue loopExterno;
+                            }else if(o == 1){
+                                JOptionPane.showMessageDialog(null,"Pagamento realizado! Como penalidade você deve devolver todos os jogos!");
+                                for(Aluguel a : clienteAluguel.getAlugueis()){
+                                    a.renovar();
+                                }
+                            }else if(o == 2){
+                                JOptionPane.showMessageDialog(null,"Sem aluguel pra você! Pague sua dívida!");
+                                continue loopExterno;
+                            }
+                        }  
+                        case 6:
+                            estoque.atualizaArquivos();
+                            atualizaArquivosCliente(clientes);
                             return;
                         default:
                             break;
@@ -331,9 +487,9 @@ public class Main {
             };
 
             JTextArea textoEstoque = new JTextArea(10, 30);
-                                textoEstoque.setText("Lista de Jogos:\n" + estoque.mostrarJogos());
-                                textoEstoque.setEditable(false);
-                                JScrollPane scrollEstoque = new JScrollPane(textoEstoque);
+            textoEstoque.setText("Lista de Jogos:\n" + estoque.mostrarJogos());
+            textoEstoque.setEditable(false);
+            JScrollPane scrollEstoque = new JScrollPane(textoEstoque);
 
             JPanel painel = new JPanel();
             painel.setLayout(new BorderLayout(0, 0));
@@ -436,8 +592,7 @@ public class Main {
                                                 continue loopExterno;
                                             }
 
-                            int matricula = vendedores.size();
-                            Funcionario.setMatriculaAtual(matricula+1);
+                            Funcionario.setMatriculaAtual(vendedores.getLast().getMatricula());
 
                             Vendedor vendedor = new Vendedor(nome.getText(), cpf.getText(), Double.parseDouble(salario.getText()));
                             vendedores.add(vendedor);

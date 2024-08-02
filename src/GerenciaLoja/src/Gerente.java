@@ -21,14 +21,12 @@ public class Gerente extends Funcionario {
         return this.salario;
     }
 
-// Colocar a Entrada de dados dos jogos na Main ?
     public boolean cadastrarJogo(Estoque estoque, int opcao) throws IOException{
         if(estoque.getJogos() == null){
             Jogo.setCodigoAtual(0);
         }
 
-        int novoCodigo = estoque.jogos.size();
-        Jogo.setCodigoAtual(novoCodigo);
+        Jogo.setCodigoAtual(estoque.jogos.getLast().getCodigo());
 
         if(opcao == 1){
             JTextField nome = new JTextField();

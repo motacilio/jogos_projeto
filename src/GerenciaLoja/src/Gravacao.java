@@ -15,6 +15,36 @@ public class Gravacao {
         gravaVendedor(new Vendedor("Diana", "1123", 2700));
         gravaVendedor(new Vendedor("Eduardo", "4567", 3100));
         
+        //Gravando Clientes
+        gravaCliente(new Cliente("Jonas", "5673"));
+        gravaCliente(new Cliente("César", "3245"));
+        gravaCliente(new Cliente("Líbna", "9001"));
+        gravaCliente(new Cliente("Marta", "9100"));
+        gravaCliente(new Cliente("Maria", "1121"));
+        gravaCliente(new Cliente("Júnior", "6345"));
+        gravaCliente(new Cliente("Alice", "4783"));
+        gravaCliente(new Cliente("Bruno", "2941"));
+        gravaCliente(new Cliente("Carla", "8572"));
+        gravaCliente(new Cliente("Diego", "5632"));
+        gravaCliente(new Cliente("Elisa", "7810"));
+        gravaCliente(new Cliente("Fernando", "6231"));
+        gravaCliente(new Cliente("Gabriela", "1456"));
+        gravaCliente(new Cliente("Henrique", "3945"));
+        gravaCliente(new Cliente("Isabela", "6789"));
+        gravaCliente(new Cliente("João", "8472"));
+        gravaCliente(new Cliente("Karen", "2156"));
+        gravaCliente(new Cliente("Leonardo", "9312"));
+        gravaCliente(new Cliente("Marina", "7543"));
+        gravaCliente(new Cliente("Nicolas", "6209"));
+        gravaCliente(new Cliente("Olivia", "4876"));
+        gravaCliente(new Cliente("Paulo", "3589"));
+        gravaCliente(new Cliente("Quésia", "9467"));
+        gravaCliente(new Cliente("Rafael", "7123"));
+        gravaCliente(new Cliente("Sofia", "5248"));
+        gravaCliente(new Cliente("Thiago", "6381"));
+
+        //Gravando gerente
+        gravaGerente(new Gerente("Bruno", "9856", 6000));
 
         //Gravando Jogos Digitais
         gravaJogoDig(new Digital("Minecraft", 15, 20, "Aventura", "Mojang", "PC", "Online"));
@@ -60,9 +90,21 @@ public class Gravacao {
         gravaJogoTab(new Tabuleiro("Root", 9, 59.99, "Estratégia", "Leder Games", 4));
         gravaJogoTab(new Tabuleiro("Spirit Island", 7, 79.99, "Cooperativo", "Greater Than Games", 4));
         gravaJogoTab(new Tabuleiro("Everdell", 8, 59.99, "Estratégia", "Starling Games", 4));
+    }
 
+    public static void gravaCliente(Cliente cliente) throws IOException {
+        try{
+            boolean append = new File("cliente.txt").exists();
+            FileOutputStream fx = new FileOutputStream("cliente.txt", true);
+            ObjectOutputStream ox = append ? new AppendingObjectOutputStream(fx) : new ObjectOutputStream(fx);
 
-
+            ox.writeObject(cliente);
+            ox.flush();
+            ox.close();
+            fx.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }   
     }
 
     public static void gravaJogoTab(Tabuleiro jogo) throws IOException{
