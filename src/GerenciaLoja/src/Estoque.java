@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -137,17 +138,32 @@ public class Estoque{
 
 
     public void atualizarEstoque(int codigo, int quantidade){
-        for(Jogo jogo: jogos){
-            if(jogo.getCodigo() == codigo){
-                int novaQuantidade = jogo.getQuantidade() - quantidade;
-                if(novaQuantidade >= 0){
-                    jogo.setQuantidade(novaQuantidade);
-                } else{
-                    throw new IllegalArgumentException("Quantidade insuficiente no estoque!");
-                }
-                break;
+        Jogo jogo = this.getJogo(codigo);
+
+        if (jogo != null) {
+            int novaQuantidade = jogo.getQuantidade() - quantidade;
+
+            System.out.println("Nova Quantidade = " + novaQuantidade);
+
+            if (novaQuantidade >= 0) {
+                jogo.setQuantidade(novaQuantidade);
+            }
+            else {
+                throw new IllegalArgumentException("Quantidade Insuficiente no Estoque!");
             }
         }
+
+//        for(Jogo jogo: jogos){
+//            if(jogo.getCodigo() == codigo){
+//                int novaQuantidade = jogo.getQuantidade() - quantidade;
+//                if(novaQuantidade >= 0){
+//                    jogo.setQuantidade(novaQuantidade);
+//                } else{
+//                    throw new IllegalArgumentException("Quantidade insuficiente no estoque!");
+//                }
+//                break;
+//            }
+//        }
     }
 
     public Jogo getJogo(int codigo) {

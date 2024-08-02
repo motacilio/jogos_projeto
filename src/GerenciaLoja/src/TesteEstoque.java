@@ -53,4 +53,22 @@ public class TesteEstoque {
         System.out.println("PASSOU NO TESTE DE GET JOGO!");
     }
 
+    @Test
+    public void testAtualizarEstoque() {
+        Estoque e = Estoque.getInstance();
+
+        Jogo jogo = new Digital("FIFA", 2,300.00, "Esportes", "EA", "Console", "Online");
+
+        e.adicionarJogoDig(jogo);
+        int codJogo = jogo.getCodigo();
+
+        e.atualizarEstoque(codJogo, 1);
+
+        assertEquals(1, jogo.getQuantidade());
+
+        System.out.println("PASSOU NO TESTE DE ATUALIZAR ESTOQUE!");
+
+    }
+
+
 }

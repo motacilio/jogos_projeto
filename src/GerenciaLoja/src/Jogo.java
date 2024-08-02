@@ -69,7 +69,7 @@ public abstract class Jogo implements Serializable {
     }
 
     public void setQuantidade(int quantidade) {
-        this.quantidade -= quantidade;
+        this.quantidade = quantidade;
     }
 
     public void somarQuant(int quantidade){
