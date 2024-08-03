@@ -409,7 +409,7 @@ public class Main {
 
                         case 3:
                             if(alugueis.isEmpty()){
-                                JOptionPane.showMessageDialog(null,"Não tem aluguéis...");
+                                JOptionPane.showMessageDialog(null,"Não há aluguéis...");
                             }else{
                                 JTextField cpfAluguelRenovar = new JTextField();
                                 JTextField codigoAluguelRenovar = new JTextField();
