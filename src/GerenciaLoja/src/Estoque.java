@@ -71,15 +71,15 @@ public class Estoque{
 
 
     public void adicionarJogoTab(Jogo jogo){
-        jogos.add(jogo);
+        this.jogos.add(jogo);
         System.out.println("Código do jogo:"+jogo.getCodigo()+", static:"+Jogo.getCodigoAtual());
-        qtdeTab += jogo.getQuantidade();
+        this.qtdeTab += jogo.getQuantidade();
     }
 
     public void adicionarJogoDig(Jogo jogo){
         jogos.add(jogo);
         System.out.println("Código do jogo:"+jogo.getCodigo()+", static:" + Jogo.getCodigoAtual());
-        qtdeDig += jogo.getQuantidade();
+        this.qtdeDig += jogo.getQuantidade();
     }
 
 
@@ -89,14 +89,14 @@ public class Estoque{
         if(jogoAux == null){
             JOptionPane.showMessageDialog(null,"Esse jogo não existe");
             return;
-        }else{
+        }else {
             jogos.remove(jogoAux);
+        }
  
         if(jogoAux instanceof Tabuleiro)
             qtdeTab -= jogoAux.getQuantidade();
-        else
+        else 
             qtdeDig -= jogoAux.getQuantidade();
-        }
     }
 
     public void atualizaArquivos() throws IOException{
@@ -140,6 +140,8 @@ public class Estoque{
         Jogo jogo = this.getJogo(codigo);
         if(jogo != null){
             int novaQuantidade = jogo.getQuantidade() + quantidade;
+            
+            jogo.setQuantidade(novaQuantidade);
         }
     }
 
@@ -177,10 +179,10 @@ public class Estoque{
                 s.append(jogo.mostraInfo()).append("\n\n");
         }
 
-        s.append("\n\nJogos Digitais:" + this.qtdeTab + "\n\n");
+        s.append("\n\nJogos de Tabuleiro:" + this.qtdeTab + "\n\n");
         for(Jogo jogo : jogos){
             if(jogo instanceof Tabuleiro)
-                s.append(jogo.mostraInfo()).append("\n");
+                s.append(jogo.mostraInfo()).append("\n\n");
         }
 
         return s.toString();

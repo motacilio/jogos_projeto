@@ -46,7 +46,7 @@ public class Gravacao {
         //Gravando gerente
         gravaGerente(new Gerente("Bruno", "9856", 6000));
 
-        //Gravando Jogos Digitais
+        //Gravando Jogos Digitais Qnt = 20
         gravaJogoDig(new Digital("Minecraft", 15, 20, "Aventura", "Mojang", "PC", "Online"));
         gravaJogoDig(new Digital("The Legend of Zelda: Breath of the Wild", 12, 59.99, "Aventura", "Nintendo", "Nintendo Switch", "Offline"));
         gravaJogoDig(new Digital("Cyberpunk 2077", 14, 49.99, "RPG", "CD Projekt", "PC", "Offline"));
@@ -69,7 +69,7 @@ public class Gravacao {
         gravaJogoDig(new Digital("The Last of Us Part II", 5, 59.99, "Ação/Aventura", "Naughty Dog", "PlayStation 4", "Offline"));
         gravaJogoDig(new Digital("Sekiro: Shadows Die Twice", 4, 59.99, "Ação/Aventura", "FromSoftware", "PC", "Offline"));
 
-        //Gravando Jogos de Tabuleiro
+        //Gravando Jogos de Tabuleiro Qnt = 20
         gravaJogoTab(new Tabuleiro("Catan", 15, 44.99, "Estratégia", "Kosmos", 4));
         gravaJogoTab(new Tabuleiro("Carcassonne", 12, 34.99, "Estratégia", "Z-Man Games", 5));
         gravaJogoTab(new Tabuleiro("Ticket to Ride", 18, 49.99, "Família", "Days of Wonder", 5));

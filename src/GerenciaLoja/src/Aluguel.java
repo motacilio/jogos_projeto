@@ -16,18 +16,18 @@ public class Aluguel implements Serializable{
 
         // Código para Testes de Aluguel em Atraso
             // Considerando que a Loja foi fundada em 01/07/2024 até a Data Atual 
-        int maxDiasMeses2024[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        final int min = 7;
-        final int maxMeses = LocalDate.now().getMonthValue();
+                int maxDiasMeses2024[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+                final int min = 7;
+                final int maxMeses = LocalDate.now().getMonthValue();
 
-        final int diaDeHoje = LocalDate.now().getDayOfMonth();
-        maxDiasMeses2024[maxMeses - 1] = diaDeHoje;
+                final int diaDeHoje = LocalDate.now().getDayOfMonth();
+                maxDiasMeses2024[maxMeses - 1] = diaDeHoje;
 
 
-        int randomMes = min + (int) (Math.random() * (maxMeses - min + 1));
-        int randomDia = min + (int) (Math.random() * (maxDiasMeses2024[randomMes - 1] - min + 1));
+                int randomMes = min + (int) (Math.random() * (maxMeses - min + 1));
+                int randomDia = 1 + (int) (Math.random() * (maxDiasMeses2024[randomMes - 1] - min + 1));
 
-        this.dataAluguel = LocalDate.of(2024, randomMes, randomDia);
+                this.dataAluguel = LocalDate.of(2024, randomMes, randomDia);
 
         // this.dataAluguel = LocalDate.now();
     }
