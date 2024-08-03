@@ -38,25 +38,31 @@ public class Cliente extends Pessoa {
     // }
 
     public double devolver(Estoque estoque, int codigo) {
-        double multa = 0;
-        if(qtdeAtrasos() > 0){
-            for(Aluguel aluguel : alugueis){
+        for(Aluguel aluguel: alugueis){
+            if(aluguel.getCodigo() == codigo){
                 if(aluguel.atraso()){
-                    multa = aluguel.verificarMulta();
-                }
-            }
-            return multa;
-        }else{
-            for(Aluguel aluguel: alugueis){
-                if(aluguel.getCodigo() == codigo){
+                    double multa = aluguel.verificarMulta();
+                    estoque.adicionarQuantidadeEstoque(aluguel.getCodigo(), 1);
                     alugueis.remove(aluguel);
-                    aluguel.getJogo().somarQuant(1);
+                    return multa;
                 }
+                estoque.adicionarQuantidadeEstoque(aluguel.getCodigo(), 1);
+                alugueis.remove(aluguel);
+                return 0;
             }
-            return 0;
         }
-
+        return -1;
     }
+
+   /* public int renovarAluguel(int codigoAluguel) {
+        for(Aluguel aluguel: alugueis){
+            if(aluguel.atraso()){
+                JOptionPane.showConfirmDialog(null, String.format("Você terá que pagar R$%f de multa para renovar", aluguel.verificarMulta()));
+                this.devolver(Estoque.getInstance(), codigoAluguel);
+
+            }
+        }
+    } */
 
     public double valorMulta(){
         double multa = 0;
@@ -70,22 +76,6 @@ public class Cliente extends Pessoa {
         return multa;
     }
 
-    public int renovarAluguel(int codigoAluguel) {
-        if (this.qtdeAtrasos() > 0) {
-            return 1;
-            // cliente possui alugueis atrasados
-        }
-
-        for (Aluguel aluguel : alugueis) {
-            if (aluguel.getCodigo() == codigoAluguel) {
-                aluguel.renovar();
-                //Sucesso
-                return 0;
-            }
-        }
-        //Aluguel nao encontrado
-        return 2;
-    }
 
     public void mostrarAlugueis() {
         for(Aluguel aluguel: alugueis){

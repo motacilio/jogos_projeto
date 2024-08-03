@@ -16,8 +16,8 @@ public class Aluguel implements Serializable{
         this.dataAluguel = LocalDate.now();
     }
 
-    // Método para calcular a data de devolução
-    public LocalDate dataDevolucao() {
+    // Método para calcular a data de devolução, private pois nada fora usa
+    private LocalDate dataDevolucao() {
         return dataAluguel.plusDays(tempoDevDias);
     }
 
@@ -25,6 +25,7 @@ public class Aluguel implements Serializable{
     public boolean atraso(){
         return LocalDate.now().isAfter(dataDevolucao());
     }
+
 
     // Método para calcular a multa
     public double verificarMulta() {
@@ -43,9 +44,6 @@ public class Aluguel implements Serializable{
         return s.toString();
     }
 
-    public void renovar(){
-        this.dataAluguel = LocalDate.now();
-    }
 
     public Jogo getJogo(){
         return jogo;

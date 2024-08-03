@@ -126,6 +126,14 @@ public class Main {
         }
         return null;
     }
+    public static Aluguel encontraAluguel(int codigo, List<Aluguel> alugueis){
+        for(Aluguel aluguel: alugueis){
+            if(aluguel.getCodigo() == codigo){
+                return aluguel;
+            }
+        }
+        return null;
+    }
 
     public static void atualizaArquivosFunc(ArrayList<Vendedor> vends) throws IOException{
         FileOutputStream arqVend = new FileOutputStream("vend.txt");
@@ -195,6 +203,7 @@ public class Main {
 
         login:
         while(true) {
+
             int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
                 int matricula = Integer.parseInt(usernameField.getText());
@@ -244,9 +253,9 @@ public class Main {
             textoEstoque.setEditable(false);
             JScrollPane scrollEstoque = new JScrollPane(textoEstoque);
 
-            String s = "";
+            StringBuilder s = new StringBuilder();
             for(Aluguel a : alugueis){
-                s += a.mostraAluguel() + "\n";
+                s.append(a.mostraAluguel()).append("\n");
             }
 
             JTextArea textoAluguel = new JTextArea(10, 30);
@@ -380,28 +389,78 @@ public class Main {
                                     "Nome:", nome, "CPF: ", cpfNovo
                             };
 
-                            JOptionPane.showConfirmDialog(
+                            int resultadoCadastrar = JOptionPane.showConfirmDialog(
                                     null,
                                     camposCadastroCliente,
                                     "Cadastro de Cliente",
                                     JOptionPane.OK_CANCEL_OPTION
                             );
-                            if(nome.getText().isBlank() || cpfNovo.getText().isBlank()){
-                                JOptionPane.showMessageDialog(null, "Digite dados válidos");
-                                continue loopExterno;
+                            if(resultadoCadastrar == JOptionPane.OK_OPTION){
+                                if(nome.getText().isBlank() || cpfNovo.getText().isBlank()){
+                                    JOptionPane.showMessageDialog(null, "Digite dados válidos");
+                                } else {
+                                    Pessoa.setCodigoAtual(clientes.getLast().getCodigo());
+                                    clientes.add(new Cliente(nome.getText(), cpfNovo.getText()));
+                                    JOptionPane.showMessageDialog(null, "Cliente Cadastrado!");
+                                }
                             }
 
-                            Pessoa.setCodigoAtual(clientes.getLast().getCodigo());
-                            clientes.add(new Cliente(nome.getText(), cpfNovo.getText()));
-                            JOptionPane.showMessageDialog(null, "Cliente Cadastrado!");
                             continue loopExterno;
+
+                        case 3:
+                            if(alugueis.isEmpty()){
+                                JOptionPane.showMessageDialog(null,"Não tem aluguéis...");
+                            }else{
+                                JTextField cpfAluguelRenovar = new JTextField();
+                                JTextField codigoAluguelRenovar = new JTextField();
+                                Object[] camposRenovacao = {
+                                        scrollAluguel, "CPF:", cpfAluguelRenovar, "Codigo do Aluguel", codigoAluguelRenovar
+                                };
+
+                                int resultadoOpcaoRenovar = JOptionPane.showConfirmDialog(
+                                        null,
+                                        camposRenovacao,
+                                        "Dados da Renovação",
+                                        JOptionPane.OK_CANCEL_OPTION
+                                );
+
+                                if(resultadoOpcaoRenovar == JOptionPane.OK_OPTION){
+                                    if(!codigoAluguelRenovar.getText().isBlank() || !cpfAluguelRenovar.getText().isBlank()){
+                                        Cliente clienteRenovar = encontraCliente(cpfAluguelRenovar.getText(), clientes);
+                                        Aluguel aluguelRenovar = encontraAluguel(Integer.parseInt(codigoAluguelRenovar.getText()), alugueis);
+                                        if(clienteRenovar == null || aluguelRenovar == null){
+                                            JOptionPane.showMessageDialog(null, "Cliente ou aluguel não encontrados...");
+                                            continue loopExterno;
+                                        } else{
+                                            double multa = clienteRenovar.devolver(estoque, Integer.parseInt(codigoAluguelRenovar.getText()));
+                                            if(multa > 0){
+                                                JOptionPane.showMessageDialog(null, String.format("Você pagará R$%.2f de multa pelo atraso", aluguelRenovar.verificarMulta()));
+                                            }
+                                            Aluguel aluguelRenovado = vendedorLogado.processarAluguel(clienteRenovar, aluguelRenovar.getJogo().getCodigo(), estoque);
+                                            if(aluguelRenovado != null){
+                                                alugueis.remove(aluguelRenovar);
+                                                alugueis.add(aluguelRenovado);
+                                                JOptionPane.showMessageDialog(null, "Aluguel renovado com sucesso!");
+                                            } else{
+                                                JOptionPane.showMessageDialog(null, "Falha ao processar o aluguel!");
+                                                continue loopExterno;
+                                            }
+                                        }
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "Digite código e cpf válidos...");
+                                    }
+                                }
+                            }
+                            continue loopExterno;
+
                         case 4:
-                            if(alugueis == null){
+                            if(alugueis.isEmpty()){
                                 JOptionPane.showMessageDialog(null,"Não tem aluguéis...");
                             }else{
                                 JOptionPane.showMessageDialog(null, scrollAluguel);
                             }
                             continue loopExterno;
+
                         case 5:
                         cpfAluguel = new JTextField();
                         JTextField codigo = new JTextField();
@@ -410,56 +469,50 @@ public class Main {
                                 "CPF:", cpfAluguel
                         };
 
-                        resultado = JOptionPane.showConfirmDialog(
+                        int resultadoCpfDevolver = JOptionPane.showConfirmDialog(
                                 null,
                                 camposAluguel,
                                 "Devolver",
                                 JOptionPane.OK_CANCEL_OPTION
                         );
+                        if(resultadoCpfDevolver == JOptionPane.OK_OPTION){
+                            Cliente clienteAluguel = encontraCliente(cpfAluguel.getText(), clientes);
+                            if(clienteAluguel != null){
 
-                        Cliente clienteAluguel = encontraCliente(cpfAluguel.getText(), clientes);
-
-                        s = "";
-                        for(Aluguel a : clienteAluguel.getAlugueis()){
-                            s+=a.mostraAluguel()+"\n";
-                        }
-
-                        textoAluguel = new JTextArea(10, 30);
-                        textoAluguel.setText("Lista de aluguéis:\n" + s);
-                        textoAluguel.setEditable(false);
-                        scrollAluguel = new JScrollPane(textoAluguel);
-
-                        campos = new Object[] {scrollAluguel, "Código do aluguel para devolver:", codigo};
-
-                        JOptionPane.showConfirmDialog(null, campos, "Devolução", JOptionPane.OK_CANCEL_OPTION);
-
-                        double devolução = clienteAluguel.devolver(estoque, Integer.parseInt(codigo.getText()));
-                        if(devolução == 0){
-                            JOptionPane.showMessageDialog(null, "Devolução realizada!");
-                            continue loopExterno;
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Esse cliente tem atrasos: \n"+clienteAluguel.qtdeAtrasos()+" atrasos. Multa de: " + clienteAluguel.valorMulta());
-                            Object[] ops = {"Devolver", "Renovar", "Cancelar"};
-                            
-                            int o = JOptionPane.showOptionDialog(null, null, "Devolução", JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.INFORMATION_MESSAGE, null, ops, ops[0]);
-                            if(o == 0){
-                                JOptionPane.showMessageDialog(null,"Pagamento realizado! Como penalidade você deve devolver todos os jogos!");
+                                s = new StringBuilder();
                                 for(Aluguel a : clienteAluguel.getAlugueis()){
-                                    a.renovar();
-                                    clienteAluguel.devolver(estoque, a.getCodigo());
+                                    s.append(a.mostraAluguel()).append("\n");
                                 }
-                                continue loopExterno;
-                            }else if(o == 1){
-                                JOptionPane.showMessageDialog(null,"Pagamento realizado! Como penalidade você deve devolver todos os jogos!");
-                                for(Aluguel a : clienteAluguel.getAlugueis()){
-                                    a.renovar();
+
+                                textoAluguel = new JTextArea(10, 30);
+                                textoAluguel.setText("Lista de aluguéis:\n" + s);
+                                textoAluguel.setEditable(false);
+                                scrollAluguel = new JScrollPane(textoAluguel);
+
+                                campos = new Object[] {scrollAluguel, "Código do aluguel para devolver:", codigo};
+
+                                int resultadoCodigoDevolver = JOptionPane.showConfirmDialog(null, campos, "Devolução", JOptionPane.OK_CANCEL_OPTION);
+
+                                if(resultadoCodigoDevolver == JOptionPane.OK_OPTION){
+                                    Aluguel aluguelDevolvido = encontraAluguel(Integer.parseInt(codigo.getText()), alugueis);
+                                    if(aluguelDevolvido != null){
+                                        double devolucao = clienteAluguel.devolver(estoque, Integer.parseInt(codigo.getText()));
+                                        if(devolucao == 0){
+                                            JOptionPane.showMessageDialog(null, "Devolução realizada!");
+                                        }else{
+                                            JOptionPane.showMessageDialog(null, String.format("O cliente pagará uma multa de R$%.2f pelo atraso", aluguelDevolvido.verificarMulta()));
+                                            JOptionPane.showMessageDialog(null, "Devolução realizada!");
+                                        }
+                                        alugueis.remove(aluguelDevolvido);
+                                    } else{
+                                        JOptionPane.showMessageDialog(null, "Aluguel não encontrado...");
+                                    }
                                 }
-                            }else if(o == 2){
-                                JOptionPane.showMessageDialog(null,"Sem aluguel pra você! Pague sua dívida!");
-                                continue loopExterno;
+                            } else{
+                                JOptionPane.showMessageDialog(null, "Cliente não encontrado...");
                             }
-                        }  
+                        }
+                        continue loopExterno;
                         case 6:
                             estoque.atualizaArquivos();
                             atualizaArquivosCliente(clientes);
@@ -602,12 +655,11 @@ public class Main {
                             if(estoque.getJogos() == null){
                                 JOptionPane.showMessageDialog(null,
                                                             "Não tem jogos cadastrados!");
-                                continue loopExterno;
                             }else{
                                 JOptionPane.showMessageDialog(null, scrollEstoque, "Estoque", JOptionPane.INFORMATION_MESSAGE);
-                                continue loopExterno;
                             }
-                        //Atualiza Jogo
+                            continue loopExterno;
+                            //Atualiza Jogo
                         case 4:
                             cod = JOptionPane.showInputDialog(null, scrollEstoque, null, JOptionPane.OK_CANCEL_OPTION); 
 
@@ -617,12 +669,10 @@ public class Main {
 
                             codigo = Integer.parseInt(cod);
                             boolean o = gerente.atualizarJogo(estoque, codigo);
-                            if(o == false){
-                                continue loopExterno;
-                            }else{
-                                JOptionPane.showMessageDialog(null,"Mudanças salvas");
-                                continue loopExterno;
+                            if (o) {
+                                JOptionPane.showMessageDialog(null, "Mudanças salvas");
                             }
+                            continue loopExterno;
 
                         case 5:
                             atualizaArquivosFunc(vendedores);

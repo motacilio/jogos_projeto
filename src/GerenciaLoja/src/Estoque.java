@@ -136,13 +136,20 @@ public class Estoque{
     }
 
 
-    public void atualizarEstoque(int codigo, int quantidade){
+    public void adicionarQuantidadeEstoque(int codigo, int quantidade){
+        Jogo jogo = this.getJogo(codigo);
+        if(jogo != null){
+            int novaQuantidade = jogo.getQuantidade() + quantidade;
+        }
+    }
+
+    public void removerQuantidadeEstoque(int codigo, int quantidade){
         Jogo jogo = this.getJogo(codigo);
 
         if (jogo != null) {
             int novaQuantidade = jogo.getQuantidade() - quantidade;
 
-            System.out.println("Nova Quantidade = " + novaQuantidade);
+            // System.out.println("Nova Quantidade = " + novaQuantidade);
 
             if (novaQuantidade >= 0) {
                 jogo.setQuantidade(novaQuantidade);

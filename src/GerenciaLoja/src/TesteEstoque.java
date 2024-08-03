@@ -1,7 +1,3 @@
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,7 +50,7 @@ public class TesteEstoque {
     }
 
     @Test
-    public void testAtualizarEstoque() {
+    public void testRemoverQuantidadeEstoque() {
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Digital("FIFA", 2,300.00, "Esportes", "EA", "Console", "Online");
@@ -62,7 +58,7 @@ public class TesteEstoque {
         e.adicionarJogoDig(jogo);
         int codJogo = jogo.getCodigo();
 
-        e.atualizarEstoque(codJogo, 1);
+        e.removerQuantidadeEstoque(codJogo, 1);
 
         assertEquals(1, jogo.getQuantidade());
 

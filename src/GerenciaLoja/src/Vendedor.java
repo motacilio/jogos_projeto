@@ -9,7 +9,7 @@ public class Vendedor extends Funcionario {
     // Métodos
     public boolean vender(Cliente cliente, int codigoJogo, int quantidade, Estoque estoque){
         if(estoque.verificarDisponibilidade(codigoJogo, quantidade)){
-            estoque.atualizarEstoque(codigoJogo, quantidade);
+            estoque.removerQuantidadeEstoque(codigoJogo, quantidade);
             double valorVenda = quantidade * obterValorJogo(codigoJogo, estoque);
             this.comissao += 0.05 * valorVenda;
             modificarSalario();
@@ -34,7 +34,7 @@ public class Vendedor extends Funcionario {
             Aluguel aluguel = new Aluguel(jogo);
             aluguel.setCliente(cliente);
             cliente.adicionarAluguel(aluguel);
-            estoque.atualizarEstoque(codigoJogo, 1);
+            estoque.removerQuantidadeEstoque(codigoJogo, 1);
             cliente.setNumAluguel(cliente.getNumAluguel() + 1);
 
             return aluguel;
