@@ -53,9 +53,10 @@ public class Gerente extends Funcionario {
             }
         
             Tabuleiro jogoTabNovo = new Tabuleiro(nome.getText(), 
-                                        Integer.parseInt(quantidade.getText()), Integer.parseInt(valor.getText()), 
-                                        genero.getText(), empresa.getText(), Integer.parseInt(qnt_jogadores.getText()));
+                                    Integer.parseInt(quantidade.getText()), Double.parseDouble(valor.getText()), 
+                                    genero.getText(), empresa.getText(), Integer.parseInt(qnt_jogadores.getText()));
             estoque.adicionarJogoTab(jogoTabNovo);
+            
             return true;
         } else if(opcao == 2){
             JTextField nome = new JTextField();

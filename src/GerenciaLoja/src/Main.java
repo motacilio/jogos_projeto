@@ -572,7 +572,7 @@ public class Main {
                                 "Jogo digital", "Jogo de Tabuleiro", "Voltar"
                             };
         
-                            opcaoSelecionada = JOptionPane.showOptionDialog(
+                            int opcaoSelecionada2 = JOptionPane.showOptionDialog(
                                             null,
                                             painel,
                                             "Gerenciamento",
@@ -583,7 +583,7 @@ public class Main {
                                             opcoes[0]
                                             );
 
-                            switch (opcaoSelecionada) {
+                            switch (opcaoSelecionada2) {
                                 case 0:
                                     boolean op = gerente.cadastrarJogo(estoque, 2);
                                     if(op){
