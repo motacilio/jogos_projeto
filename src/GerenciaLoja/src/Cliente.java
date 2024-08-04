@@ -42,11 +42,11 @@ public class Cliente extends Pessoa {
             if(aluguel.getCodigo() == codigo){
                 if(aluguel.atraso()){
                     double multa = aluguel.verificarMulta();
-                    estoque.adicionarQuantidadeEstoque(aluguel.getCodigo(), 1);
+                    estoque.adicionarQuantidadeEstoque(aluguel.getJogo().getCodigo(), 1);  
                     alugueis.remove(aluguel);
                     return multa;
                 }
-                estoque.adicionarQuantidadeEstoque(aluguel.getCodigo(), 1);
+                estoque.adicionarQuantidadeEstoque(aluguel.getJogo().getCodigo(), 1); 
                 alugueis.remove(aluguel);
                 return 0;
             }
@@ -89,6 +89,16 @@ public class Cliente extends Pessoa {
         } else{
             JOptionPane.showMessageDialog(null, "Falha ao adicionar aluguel");
         }
+    }
+
+    public Aluguel obterAluguel(int codAluguel) {
+        for (Aluguel a:alugueis) {
+            if (a.getCodigo() == codAluguel) {
+                return a;
+            }
+        }
+        
+        return null;
     }
 
     // Métodos Gets

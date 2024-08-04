@@ -127,11 +127,14 @@ public class Estoque{
 
 
     public boolean verificarDisponibilidade(int codigo, int quantidade){
-        for(Jogo jogo: jogos){
-            if(jogo.getCodigo() == codigo && jogo.getQuantidade() >= quantidade){
-               return true;
+        if (quantidade > 0) {
+            for(Jogo jogo: jogos){
+                if(jogo.getCodigo() == codigo && jogo.getQuantidade() >= quantidade){
+                   return true;
+                }
             }
         }
+        
         return false;
     }
 
