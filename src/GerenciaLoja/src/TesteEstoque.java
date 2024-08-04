@@ -7,6 +7,7 @@ public class TesteEstoque {
 
     @Test
     public void testRemoverJogo() {
+        iniciaTestes();
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Tabuleiro("Catan", 15, 44.99, "Estratégia", "Kosmos", 4);
@@ -36,10 +37,12 @@ public class TesteEstoque {
         assertEquals(null, e.getJogo(codJogoDig));
 
         System.out.println("Passou no Teste de Remover Jogo!");
+        finalizaTestes();
     }
 
     @Test
     public void testVerificaDisponibilidade() {
+        iniciaTestes();
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Digital("FIFA", 5,300.00, "Esportes", "EA", "Console", "Online");
@@ -62,12 +65,13 @@ public class TesteEstoque {
         assertEquals(false, e.verificarDisponibilidade(-1, 5));
 
         System.out.println("Passo no Teste de Disponibilidade de Estoque!");
-
+        finalizaTestes();
     }
 
 
     @Test
     public void testGetJogo() {
+        iniciaTestes();
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Digital("FIFA", 5,300.00, "Esportes", "EA", "Console", "Online");
@@ -81,10 +85,13 @@ public class TesteEstoque {
         assertEquals(null, e.getJogo(jogo.getCodigo() + 1));
 
         System.out.println("Passou no Teste de Get Jogo!");
+        
+        finalizaTestes();
     }
 
     @Test
     public void testRemoverQuantidadeEstoque() {
+        iniciaTestes();
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Digital("FIFA", 2,300.00, "Esportes", "EA", "Console", "Online");
@@ -97,10 +104,12 @@ public class TesteEstoque {
         assertEquals(1, jogo.getQuantidade());
 
         System.out.println("Passou no Teste de Remover Quantidade do Estoque!");
+        finalizaTestes();
     }
 
     @Test
     public void testAdicionarQuantidadeEstoque() {
+        iniciaTestes();
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Digital("FIFA", 2,300.00, "Esportes", "EA", "Console", "Online");
@@ -113,10 +122,12 @@ public class TesteEstoque {
         assertEquals(3, jogo.getQuantidade());
 
         System.out.println("Passou no Teste de Adicionar Quantidade no Estoque!");
+        finalizaTestes();
     }
 
     @Test
     public void testAdicionarjogoTab() {
+        iniciaTestes();
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Tabuleiro("Catan", 10, 44.99, "Estratégia", "Kosmos", 4);
@@ -127,10 +138,12 @@ public class TesteEstoque {
         assertEquals(jogo, e.getJogo(codJogo));
 
         System.out.println("Passou no Teste de Adicionar Jogo de Tabuleiro!");
+        finalizaTestes();
     }
 
     @Test
     public void testAdicionarjogoDig() {
+        iniciaTestes();
         Estoque e = Estoque.getInstance();
 
         Jogo jogo = new Digital("Minecraft", 15, 20, "Aventura", "Mojang", "PC", "Online");
@@ -141,6 +154,7 @@ public class TesteEstoque {
         assertEquals(jogo, e.getJogo(codJogo));
 
         System.out.println("Passou no Teste de Adicionar Jogo Digital!");
+        finalizaTestes();
     }
 
     
@@ -153,6 +167,5 @@ public class TesteEstoque {
     public void finalizaTestes() {
         System.out.println("======= FIM DOS TESTES DE ESTOQUE =======");
     }
-
 
 }

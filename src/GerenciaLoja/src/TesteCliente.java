@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.After;
@@ -79,8 +78,6 @@ public class TesteCliente {
 
         Jogo jogo =  new Digital("God of War", 10, 39.99, "Ação/Aventura", "Santa Monica Studio", "PlayStation 4", "Offline");
         e.adicionarJogoDig(jogo);
-        Jogo jogo2 = new Digital("Cyberpunk 2077", 14, 49.99, "RPG", "CD Projekt", "PC", "Offline");
-        e.adicionarJogoDig(jogo2);
 
         
         // vend.processarAluguel(cliente, jogo2, e);
@@ -108,11 +105,12 @@ public class TesteCliente {
         // Quando não há multa
         assertEquals(0, cliente.devolver(e, aluguel.getCodigo()));
 
+        aluguel = vend.processarAluguel(cliente, jogo.getCodigo(), e);
         
         aluguel.setDataAluguel(2024, mes, dia);
         
         // Quando há atrasos no aluguel
-        assertEquals(7, cliente.devolver(e, aluguel.getCodigo()));
+        assertEquals(7.0, cliente.devolver(e, aluguel.getCodigo()));
         
 
         System.out.println("Passou no Teste de Devolver Jogo Alugado!");

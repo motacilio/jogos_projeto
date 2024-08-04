@@ -50,6 +50,7 @@ public class TesteVendedor {
 
         // Aluguel quando o jogo não existe
         assertNull(vend.processarAluguel(cliente, jogo.getCodigo() + 1, e));
+        
         // Aluguel quando o jogo existe 
         assertNotNull(vend.processarAluguel(cliente, jogo.getCodigo(), e));
         
