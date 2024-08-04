@@ -1,3 +1,4 @@
+
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,30 +10,47 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-public class Estoque{
-   private static Estoque instance;
+/**
+ * Classe que representa o Estoque contendo uma lista de jogos.
+ */
+public class Estoque {
+    private static Estoque instance;
 
     private int qtdeTab;
     private int qtdeDig;
     ArrayList<Jogo> jogos = new ArrayList<>();
 
+    /**
+     * Construtor que cria o Estoque vazio.
+     */
     private Estoque() {
         this.qtdeTab = 0;
         this.qtdeDig = 0;
     }
 
-    public static synchronized Estoque getInstance(){
-        if(instance == null){
+    /**
+     * Retorna a instância do Estoque.
+     *
+     * @return a instância do Estoque
+     */
+    public static synchronized Estoque getInstance() {
+        if (instance == null) {
             instance = new Estoque();
         }
         return instance;
     }
 
+    /**
+     * Lê os arquivos dos jogos para preencher o estoque.
+     */
     public void lerArquivos() {
         lerArquivoTab();
         lerArquivoDig();
     }
 
+    /**
+     * Lê o arquivo de jogos de tabuleiro e preenche o estoque.
+     */
     private void lerArquivoTab() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("EstoqueTab.txt"))) {
             while (true) {
@@ -51,6 +69,9 @@ public class Estoque{
         }
     }
 
+    /**
+     * Lê o arquivo de jogos digitais e preenche o estoque.
+     */
     private void lerArquivoDig() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("EstoqueDig.txt"))) {
             while (true) {
@@ -69,53 +90,69 @@ public class Estoque{
         }
     }
 
-
-    public void adicionarJogoTab(Jogo jogo){
+    /**
+     * Adiciona um jogo de tabuleiro ao estoque.
+     *
+     * @param jogo o jogo de tabuleiro a ser adicionado
+     */
+    public void adicionarJogoTab(Jogo jogo) {
         this.jogos.add(jogo);
-        System.out.println("Código do jogo:"+jogo.getCodigo()+", static:"+Jogo.getCodigoAtual());
+        System.out.println("Código do jogo:" + jogo.getCodigo() + ", static:" + Jogo.getCodigoAtual());
         this.qtdeTab += jogo.getQuantidade();
     }
 
-    public void adicionarJogoDig(Jogo jogo){
+    /**
+     * Adiciona um jogo digital ao estoque.
+     *
+     * @param jogo o jogo digital a ser adicionado
+     */
+    public void adicionarJogoDig(Jogo jogo) {
         jogos.add(jogo);
-        System.out.println("Código do jogo:"+jogo.getCodigo()+", static:" + Jogo.getCodigoAtual());
+        System.out.println("Código do jogo:" + jogo.getCodigo() + ", static:" + Jogo.getCodigoAtual());
         this.qtdeDig += jogo.getQuantidade();
     }
 
-
-    public void removerJogo(int codigo){
+    /**
+     * Remove um jogo do estoque.
+     *
+     * @param codigo o código do jogo a ser removido
+     */
+    public void removerJogo(int codigo) {
         Jogo jogoAux = getJogo(codigo);
 
-        if(jogoAux == null){
-            JOptionPane.showMessageDialog(null,"Esse jogo não existe");
+        if (jogoAux == null) {
+            JOptionPane.showMessageDialog(null, "Esse jogo não existe");
             return;
-        }else {
+        } else {
             jogos.remove(jogoAux);
         }
- 
-        if(jogoAux instanceof Tabuleiro)
+
+        if (jogoAux instanceof Tabuleiro)
             qtdeTab -= jogoAux.getQuantidade();
-        else 
+        else
             qtdeDig -= jogoAux.getQuantidade();
     }
 
-    public void atualizaArquivos() throws IOException{
-
+    /**
+     * Atualiza os arquivos de estoque com os jogos atuais.
+     *
+     * @throws IOException se ocorrer um erro de entrada/saída
+     */
+    public void atualizaArquivos() throws IOException {
         FileOutputStream arqTabs = new FileOutputStream("EstoqueTab.txt");
         ObjectOutputStream tabs = new ObjectOutputStream(arqTabs);
 
         FileOutputStream arqDigs = new FileOutputStream("EstoqueDig.txt");
         ObjectOutputStream digs = new ObjectOutputStream(arqDigs);
 
-
-        for(Jogo j : jogos){
-            if(j instanceof Tabuleiro){
+        for (Jogo j : jogos) {
+            if (j instanceof Tabuleiro) {
                 tabs.writeObject(j);
-            }else{
+            } else {
                 digs.writeObject(j);
             }
         }
-        
+
         tabs.flush();
         tabs.close();
         arqTabs.close();
@@ -125,46 +162,66 @@ public class Estoque{
         arqDigs.close();
     }
 
-
-    public boolean verificarDisponibilidade(int codigo, int quantidade){
+    /**
+     * Verifica a disponibilidade de um jogo no estoque.
+     *
+     * @param codigo o código do jogo
+     * @param quantidade a quantidade desejada
+     * @return true se o jogo está disponível, false caso contrário
+     */
+    public boolean verificarDisponibilidade(int codigo, int quantidade) {
         if (quantidade > 0) {
-            for(Jogo jogo: jogos){
-                if(jogo.getCodigo() == codigo && jogo.getQuantidade() >= quantidade){
-                   return true;
+            for (Jogo jogo : jogos) {
+                if (jogo.getCodigo() == codigo && jogo.getQuantidade() >= quantidade) {
+                    return true;
                 }
             }
         }
-        
+
         return false;
     }
 
-
-    public void adicionarQuantidadeEstoque(int codigo, int quantidade){
+    /**
+     * Adiciona quantidade ao estoque de um jogo.
+     *
+     * @param codigo o código do jogo
+     * @param quantidade a quantidade a ser adicionada
+     */
+    public void adicionarQuantidadeEstoque(int codigo, int quantidade) {
         Jogo jogo = this.getJogo(codigo);
-        if(jogo != null){
+        if (jogo != null) {
             int novaQuantidade = jogo.getQuantidade() + quantidade;
-            
+
             jogo.setQuantidade(novaQuantidade);
         }
     }
 
-    public void removerQuantidadeEstoque(int codigo, int quantidade){
+    /**
+     * Remove quantidade do estoque de um jogo.
+     *
+     * @param codigo o código do jogo
+     * @param quantidade a quantidade a ser removida
+     */
+    public void removerQuantidadeEstoque(int codigo, int quantidade) {
         Jogo jogo = this.getJogo(codigo);
 
         if (jogo != null) {
             int novaQuantidade = jogo.getQuantidade() - quantidade;
 
-            // System.out.println("Nova Quantidade = " + novaQuantidade);
-
             if (novaQuantidade >= 0) {
                 jogo.setQuantidade(novaQuantidade);
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException("Quantidade Insuficiente no Estoque!");
             }
         }
     }
 
+    /**
+     * Retorna o jogo correspondente ao código fornecido.
+     *
+     * @param codigo o código do jogo
+     * @return o jogo correspondente ao código, ou null se não encontrado
+     */
     public Jogo getJogo(int codigo) {
         for (Jogo jogo : jogos) {
             if (jogo.getCodigo() == codigo) {
@@ -174,31 +231,42 @@ public class Estoque{
         return null;
     }
 
-    public String mostrarJogos(){
+    /**
+     * Mostra a lista de jogos no estoque.
+     *
+     * @return uma string contendo a lista de jogos no estoque
+     */
+    public String mostrarJogos() {
         StringBuilder s = new StringBuilder();
-        s.append("Jogos Digitais:" + this.qtdeDig + "\n\n");
-        for(Jogo jogo : jogos){
-            if(jogo instanceof Digital)
+        s.append("Jogos Digitais:").append(this.qtdeDig).append("\n\n");
+        for (Jogo jogo : jogos) {
+            if (jogo instanceof Digital)
                 s.append(jogo.mostraInfo()).append("\n\n");
         }
 
-        s.append("\n\nJogos de Tabuleiro:" + this.qtdeTab + "\n\n");
-        for(Jogo jogo : jogos){
-            if(jogo instanceof Tabuleiro)
+        s.append("\n\nJogos de Tabuleiro:").append(this.qtdeTab).append("\n\n");
+        for (Jogo jogo : jogos) {
+            if (jogo instanceof Tabuleiro)
                 s.append(jogo.mostraInfo()).append("\n\n");
         }
 
         return s.toString();
     }
 
+    /**
+     * Retorna a lista de jogos.
+     *
+     * @return a lista de jogos
+     */
     public ArrayList<Jogo> getJogos() {
         return jogos;
     }
 
-    public int getQTab(){
+    public int getQTab() {
         return qtdeTab;
     }
-    public int getQDig(){
+
+    public int getQDig() {
         return qtdeDig;
     }
 }

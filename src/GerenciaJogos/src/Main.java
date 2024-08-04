@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class Main {
 
     public static Gerente instanciaGerente(){
@@ -390,7 +392,7 @@ public class Main {
                                     if (resultadoAluguel != null) {
                                         JOptionPane.showMessageDialog(null, "Aluguel realizado com sucesso!");
                                         alugueis.add(resultadoAluguel);
-                                    } else if(resultadoAluguel == null){
+                                    } else {
                                         JOptionPane.showMessageDialog(null, "Falha ao processar aluguel!");
                                     }
                                     continue loopExterno;
