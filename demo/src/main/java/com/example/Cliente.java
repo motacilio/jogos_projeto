@@ -4,51 +4,72 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe que representa um cliente.
+ */
 public class Cliente extends Pessoa {
     protected int numCompras;
     protected int numAluguel;
     List<Aluguel> alugueis = new ArrayList<>();
     List<Jogo> compras = new ArrayList<>();
 
-    Cliente (String nome, String cpf) {
+    /**
+     * Construtor para criar um novo cliente.
+     *
+     * @param nome o nome do cliente.
+     * @param cpf o CPF do cliente.
+     */
+    Cliente(String nome, String cpf) {
         super(nome, cpf);
         this.numCompras = 0;
         this.numAluguel = 0;
     }
 
-    // Métodos Extras
-
-    public void adicionarCompra(Jogo jogo, int quantidade){
-        for(int i = 0; i < quantidade; i++){
+    /**
+     * Adiciona uma compra ao cliente.
+     *
+     * @param jogo o jogo comprado.
+     * @param quantidade a quantidade de jogos comprados.
+     */
+    public void adicionarCompra(Jogo jogo, int quantidade) {
+        for (int i = 0; i < quantidade; i++) {
             compras.add(jogo);
         }
         numCompras += quantidade;
     }
 
-    public int qtdeAtrasos(){
+    /**
+     * Calcula a quantidade de atrasos nos aluguéis.
+     *
+     * @return o número de atrasos.
+     */
+    public int qtdeAtrasos() {
         int num = 0;
-        for(Aluguel aluguel : alugueis){
-            if(aluguel.atraso()){
+        for (Aluguel aluguel : alugueis) {
+            if (aluguel.atraso()) {
                 num++;
             }
         }
         return num;
     }
 
-    // public boolean solicitarAluguel(int codigo, Vendedor vendedor, Estoque estoque){
-    //     return vendedor.processarAluguel(this, codigo, estoque);
-    // }
-
+    /**
+     * Devolve um jogo alugado e calcula a multa, se houver.
+     *
+     * @param estoque o estoque de jogos.
+     * @param codigo o código do aluguel.
+     * @return o valor da multa ou -1 se o aluguel não for encontrado.
+     */
     public double devolver(Estoque estoque, int codigo) {
-        for(Aluguel aluguel: alugueis){
-            if(aluguel.getCodigo() == codigo){
-                if(aluguel.atraso()){
+        for (Aluguel aluguel : alugueis) {
+            if (aluguel.getCodigo() == codigo) {
+                if (aluguel.atraso()) {
                     double multa = aluguel.verificarMulta();
-                    estoque.adicionarQuantidadeEstoque(aluguel.getJogo().getCodigo(), 1);  
+                    estoque.adicionarQuantidadeEstoque(aluguel.getJogo().getCodigo(), 1);
                     alugueis.remove(aluguel);
                     return multa;
                 }
-                estoque.adicionarQuantidadeEstoque(aluguel.getJogo().getCodigo(), 1); 
+                estoque.adicionarQuantidadeEstoque(aluguel.getJogo().getCodigo(), 1);
                 alugueis.remove(aluguel);
                 return 0;
             }
@@ -56,21 +77,16 @@ public class Cliente extends Pessoa {
         return -1;
     }
 
-   /* public int renovarAluguel(int codigoAluguel) {
-        for(Aluguel aluguel: alugueis){
-            if(aluguel.atraso()){
-                JOptionPane.showConfirmDialog(null, String.format("Você terá que pagar R$%f de multa para renovar", aluguel.verificarMulta()));
-                this.devolver(Estoque.getInstance(), codigoAluguel);
-
-            }
-        }
-    } */
-
-    public double valorMulta(){
+    /**
+     * Calcula o valor total das multas por atraso.
+     *
+     * @return o valor total das multas.
+     */
+    public double valorMulta() {
         double multa = 0;
-        if(qtdeAtrasos() > 0){
-            for(Aluguel aluguel : alugueis){
-                if(aluguel.atraso()){
+        if (qtdeAtrasos() > 0) {
+            for (Aluguel aluguel : alugueis) {
+                if (aluguel.atraso()) {
                     multa = aluguel.verificarMulta();
                 }
             }
@@ -78,58 +94,94 @@ public class Cliente extends Pessoa {
         return multa;
     }
 
-
+    /**
+     * Exibe os nomes dos jogos alugados.
+     */
     public void mostrarAlugueis() {
-        for(Aluguel aluguel: alugueis){
+        for (Aluguel aluguel : alugueis) {
             System.out.println(aluguel.jogo.getNome());
         }
     }
 
-    public void adicionarAluguel(Aluguel aluguel){
-        if(aluguel != null){
+    /**
+     * Adiciona um novo aluguel ao cliente.
+     *
+     * @param aluguel o novo aluguel.
+     */
+    public void adicionarAluguel(Aluguel aluguel) {
+        if (aluguel != null) {
             this.alugueis.add(aluguel);
-        } else{
+        } else {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar aluguel");
         }
     }
 
+    /**
+     * Obtém um aluguel pelo código.
+     *
+     * @param codAluguel o código do aluguel.
+     * @return o aluguel correspondente ou null se não for encontrado.
+     */
     public Aluguel obterAluguel(int codAluguel) {
-        for (Aluguel a:alugueis) {
+        for (Aluguel a : alugueis) {
             if (a.getCodigo() == codAluguel) {
                 return a;
             }
         }
-        
         return null;
     }
 
-    // Métodos Gets
-
+    /**
+     * Retorna o número de compras do cliente.
+     *
+     * @return o número de compras.
+     */
     public int getNumCompras() {
         return numCompras;
     }
 
+    /**
+     * Retorna o número de aluguéis do cliente.
+     *
+     * @return o número de aluguéis.
+     */
     public int getNumAluguel() {
         return numAluguel;
     }
 
+    /**
+     * Retorna a lista de aluguéis do cliente.
+     *
+     * @return a lista de aluguéis.
+     */
     public List<Aluguel> getAlugueis() {
         return alugueis;
     }
 
-    // Métodos Sets
+    /**
+     * Define o número de compras do cliente.
+     *
+     * @param numCompras o novo número de compras.
+     */
     public void setNumCompras(int numCompras) {
         this.numCompras = numCompras;
     }
 
+    /**
+     * Define o número de aluguéis do cliente.
+     *
+     * @param numAluguel o novo número de aluguéis.
+     */
     public void setNumAluguel(int numAluguel) {
         this.numAluguel = numAluguel;
     }
 
+    /**
+     * Define a lista de aluguéis do cliente.
+     *
+     * @param alugueis a nova lista de aluguéis.
+     */
     public void setAlugueis(List<Aluguel> alugueis) {
         this.alugueis = alugueis;
     }
-
-
 }
-

@@ -3,34 +3,52 @@ package com.example;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Aluguel implements Serializable{
+/**
+ * Classe que representa um aluguel de jogo.
+ */
+public class Aluguel implements Serializable {
     protected static int codigoAtual = 0;
     protected int codigo;
     protected Cliente cliente;
     protected Jogo jogo;
     protected final int tempoDevDias = 3;
     protected LocalDate dataAluguel;
-    //protected int diasDeAtraso = 0;
 
-    Aluguel (Jogo jogo) {
+    /**
+     * Construtor para criar um novo aluguel.
+     *
+     * @param jogo o jogo a ser alugado.
+     */
+    Aluguel(Jogo jogo) {
         this.codigo = 10 + codigoAtual;
         this.jogo = jogo;
         this.dataAluguel = LocalDate.now();
         codigoAtual += 10;
     }
 
-    // Método para calcular a data de devolução, private pois nada fora usa
+    /**
+     * Calcula a data de devolução do aluguel.
+     *
+     * @return a data de devolução.
+     */
     private LocalDate dataDevolucao() {
         return dataAluguel.plusDays(tempoDevDias);
     }
 
-    // Método para verificar se houve atraso na devolução
-    public boolean atraso(){
+    /**
+     * Verifica se houve atraso na devolução do jogo.
+     *
+     * @return true se houve atraso, false caso contrário.
+     */
+    public boolean atraso() {
         return LocalDate.now().isAfter(dataDevolucao());
     }
 
-
-    // Método para calcular a multa
+    /**
+     * Calcula a multa por atraso na devolução do jogo.
+     *
+     * @return o valor da multa.
+     */
     public double verificarMulta() {
         if (atraso()) {
             long diasDeAtraso = LocalDate.now().toEpochDay() - dataDevolucao().toEpochDay();
@@ -40,37 +58,75 @@ public class Aluguel implements Serializable{
         }
     }
 
-    public String mostraAluguel(){
+    /**
+     * Retorna as informações do aluguel em formato de string.
+     *
+     * @return uma string com as informações do aluguel.
+     */
+    public String mostraAluguel() {
         StringBuilder s = new StringBuilder();
-        s.append("Código: " + codigo + "\nCliente: " + cliente.getNome() + " - CPF: " + cliente.getCpf() + "\n"+
-        "Jogo: " + jogo.getNome() + "\nData de aluguel: " + dataAluguel + "\nAtraso: " + atraso() + "\nMulta:" + verificarMulta() + "\n");
+        s.append("Código: ").append(codigo)
+         .append("\nCliente: ").append(cliente.getNome()).append(" - CPF: ").append(cliente.getCpf())
+         .append("\nJogo: ").append(jogo.getNome())
+         .append("\nData de aluguel: ").append(dataAluguel)
+         .append("\nAtraso: ").append(atraso())
+         .append("\nMulta: ").append(verificarMulta()).append("\n");
         return s.toString();
     }
 
-
-    public Jogo getJogo(){
+    /**
+     * Retorna o jogo alugado.
+     *
+     * @return o jogo alugado.
+     */
+    public Jogo getJogo() {
         return jogo;
     }
 
+    /**
+     * Retorna o código do aluguel.
+     *
+     * @return o código do aluguel.
+     */
     public int getCodigo() {
         return codigo;
     }
 
-    public LocalDate getDataAluguel () {
+    /**
+     * Retorna a data do aluguel.
+     *
+     * @return a data do aluguel.
+     */
+    public LocalDate getDataAluguel() {
         return this.dataAluguel;
     }
 
-    public void setCliente(Cliente cliente){
+    /**
+     * Define o cliente que realizou o aluguel.
+     *
+     * @param cliente o cliente que realizou o aluguel.
+     */
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
-    public void setDataAluguel (int ano, int mes, int dia) {
+    /**
+     * Define a data do aluguel.
+     *
+     * @param ano o ano do aluguel.
+     * @param mes o mês do aluguel.
+     * @param dia o dia do aluguel.
+     */
+    public void setDataAluguel(int ano, int mes, int dia) {
         this.dataAluguel = LocalDate.of(ano, mes, dia);
     }
 
-    public static void setCodigoAtual(int codigo){
+    /**
+     * Define o código atual de aluguel.
+     *
+     * @param codigo o novo código atual.
+     */
+    public static void setCodigoAtual(int codigo) {
         Aluguel.codigoAtual = codigo;
     }
-
 }
-
