@@ -161,6 +161,19 @@ public class Main {
         arqCli.close();
     }
 
+    public static int codigoMaior(ArrayList<Aluguel> alugueis){
+
+        int codigoMaior = Integer.MIN_VALUE;
+
+        for(Aluguel a : alugueis){
+            if(a.getCodigo() > codigoMaior){
+                codigoMaior = a.getCodigo();
+            }
+        }
+
+        return codigoMaior;
+    }
+
     public static void main(String[] args) throws IOException {
 
         Estoque estoque = Estoque.getInstance();
@@ -368,14 +381,19 @@ public class Main {
                                         continue loopExterno;
                                     }
 
+                                    if(!alugueis.isEmpty()){
+                                        int codigoMaior = codigoMaior(alugueis);
+                                        Aluguel.setCodigoAtual(codigoMaior);   
+                                    }
+
                                     Aluguel resultadoAluguel = vendedorLogado.processarAluguel(clienteAluguel, Integer.parseInt(codigoJogoAlugar.getText()), estoque);
-                                    alugueis.add(resultadoAluguel);
                                     if (resultadoAluguel != null) {
                                         JOptionPane.showMessageDialog(null, "Aluguel realizado com sucesso!");
-                                    } else {
+                                        alugueis.add(resultadoAluguel);
+                                    } else if(resultadoAluguel == null){
                                         JOptionPane.showMessageDialog(null, "Falha ao processar aluguel!");
-                                        continue loopExterno;
                                     }
+                                    continue loopExterno;
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
                                 }
@@ -436,6 +454,8 @@ public class Main {
                                             if(multa > 0){
                                                 JOptionPane.showMessageDialog(null, String.format("Você pagará R$%.2f de multa pelo atraso", aluguelRenovar.verificarMulta()));
                                             }
+
+                                            Aluguel.setCodigoAtual(alugueis.getLast().getCodigo());
                                             Aluguel aluguelRenovado = vendedorLogado.processarAluguel(clienteRenovar, aluguelRenovar.getJogo().getCodigo(), estoque);
                                             if(aluguelRenovado != null){
                                                 alugueis.remove(aluguelRenovar);
@@ -459,8 +479,8 @@ public class Main {
                             }else{
                                 JOptionPane.showMessageDialog(null, scrollAluguel);
                             }
+                            
                             continue loopExterno;
-
                         case 5:
                         cpfAluguel = new JTextField();
                         JTextField codigo = new JTextField();

@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Aluguel implements Serializable{
-    protected static int countCodigo = 0;
+    protected static int codigoAtual = 0;
     protected int codigo;
     protected Cliente cliente;
     protected Jogo jogo;
@@ -11,25 +11,10 @@ public class Aluguel implements Serializable{
     //protected int diasDeAtraso = 0;
 
     Aluguel (Jogo jogo) {
-        this.codigo = ++countCodigo;
+        this.codigo = 10 + codigoAtual;
         this.jogo = jogo;
-
-        // // Código para Testes de Aluguel em Atraso
-        //     // Considerando que a Loja foi fundada em 01/07/2024 até a Data Atual 
-        //         int maxDiasMeses2024[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        //         final int min = 7;
-        //         final int maxMeses = LocalDate.now().getMonthValue();
-
-        //         final int diaDeHoje = LocalDate.now().getDayOfMonth();
-        //         maxDiasMeses2024[maxMeses - 1] = diaDeHoje;
-
-
-        //         int randomMes = min + (int) (Math.random() * (maxMeses - min + 1));
-        //         int randomDia = 1 + (int) (Math.random() * (maxDiasMeses2024[randomMes - 1] - min + 1));
-
-        //         this.dataAluguel = LocalDate.of(2024, randomMes, randomDia);
-
         this.dataAluguel = LocalDate.now();
+        codigoAtual += 10;
     }
 
     // Método para calcular a data de devolução, private pois nada fora usa
@@ -79,6 +64,10 @@ public class Aluguel implements Serializable{
 
     public void setDataAluguel (int ano, int mes, int dia) {
         this.dataAluguel = LocalDate.of(ano, mes, dia);
+    }
+
+    public static void setCodigoAtual(int codigo){
+        Aluguel.codigoAtual = codigo;
     }
 
 }
